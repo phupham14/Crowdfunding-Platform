@@ -1,0 +1,80 @@
+.filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+
+  select {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+  }
+}
+
+.loading {
+  padding: 10px;
+  background: #fef3c7;
+  border-radius: 6px;
+}
+
+.error {
+  padding: 10px;
+  background: #fee2e2;
+  color: #991b1b;
+  border-radius: 6px;
+}
+
+.transaction-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th, td {
+    padding: 10px;
+    border: 1px solid #e5e7eb;
+  }
+
+  th {
+    background: #f3f4f6;
+  }
+}
+
+.status {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+
+  &.success {
+    background: #d1fae5;
+    color: #065f46;
+  }
+
+  &.pending {
+    background: #fef3c7;
+    color: #92400e;
+  }
+
+  &.failed {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+}
+
+.pagination {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+
+  button {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    background: white;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}

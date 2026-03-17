@@ -1,0 +1,40 @@
+<div class="wallet-container">
+
+  <h1>My Wallet</h1>
+  <!-- BALANCE CARD -->
+  <div class="balance-card" *ngIf="wallet">
+    <p class="label">Wallet Balance</p>
+    <h2>{{ wallet.balance | currency:'VND' }}</h2>
+  </div>
+
+  <p class="wallet-message error" *ngIf="errorMessage">{{ errorMessage }}</p>
+  <p class="wallet-message success" *ngIf="successMessage">{{ successMessage }}</p>
+
+
+  <!-- ACTIONS -->
+  <div class="wallet-actions">
+
+    <!-- FUND IN -->
+    <div class="action-card fund-in">
+    <h3>Fund In</h3>
+
+    <input type="number" min="1" [(ngModel)]="amountFundIn" placeholder="Amount" />
+
+    <input type="text" [(ngModel)]="fundInDescription" placeholder="Description" />
+
+    <button (click)="fundIn()">Fund In</button>
+    </div>
+
+    <!-- WITHDRAW -->
+    <div class="action-card withdraw">
+      <h3>Withdraw</h3>
+
+      <input type="number" [(ngModel)]="amountWithdraw" placeholder="Amount" />
+
+      <input type="text" [(ngModel)]="withdrawDescription" placeholder="Description"/>
+
+      <button (click)="withdraw()">Withdraw</button>
+    </div>
+
+  </div>
+</div>

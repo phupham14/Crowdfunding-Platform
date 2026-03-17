@@ -1,0 +1,39 @@
+<section class="project-detail" *ngIf="project">
+  <div class="project-card">
+    <!-- <img [src]="project.image" alt="{{ project.name }}" class="project-image" /> -->
+
+    <div class="project-info">
+      <h1>{{ project.name }}</h1>
+      <p class="description">{{ project.description }}</p>
+
+      <ul class="project-meta">
+        <li><strong>Category:</strong> {{ project.category }}</li>  
+        <li><strong>Funding Target:</strong> {{ project.funding_target | currency }}</li>
+        <li><strong>Raised:</strong> {{ project.raised | currency }}</li>
+        <li><strong>Risk Level:</strong> {{ project.risk_level }}</li>
+        <li *ngIf="project.end_date"><strong>Ends on:</strong> {{ project.end_date | date }}</li>
+      </ul>
+
+      <div class="progress-bar">
+        <div class="progress" [style.width.%]="getFundingProgress()"></div>
+      </div>
+      <p class="progress-text">{{ getFundingProgress() | number:'1.0-0' }}% funded</p>
+
+      <button
+        class="btn-invest"
+        [class.disabled]="project.raised >= project.funding_target"
+        [disabled]="project.raised >= project.funding_target"
+        (click)="openInvestModal()">
+        {{ project.raised >= project.funding_target ? 'Fully Funded' : 'Invest Now' }}
+      </button>
+
+    </div>
+  </div>
+</section>
+<app-investment
+  *ngIf="showInvestModal"
+  [project]="project"
+  (close)="closeInvestModal()"
+  (investSuccess)="onInvestSuccess()"
+></app-investment>
+

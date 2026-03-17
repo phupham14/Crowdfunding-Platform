@@ -1,0 +1,174 @@
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+.dashboard {
+  padding: 2rem;
+  background: #f9fafb;
+}
+
+/* HEADER */
+.dashboard-header {
+  margin-bottom: 2rem;
+
+  h2 {
+    font-size: 1.8rem;
+  }
+
+  p {
+    color: #666;
+  }
+}
+
+/* KPI */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.kpi-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+
+  .label {
+    color: #666;
+    font-size: 0.9rem;
+  }
+
+  .value {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+
+  &.green { border-left: 5px solid #22c55e; }
+  &.blue { border-left: 5px solid #3b82f6; }
+  &.orange { border-left: 5px solid #f97316; }
+  &.purple { border-left: 5px solid #a855f7; }
+}
+
+/* CHARTS */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.chart-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+}
+
+/* Fake pie legend */
+.fake-pie {
+  margin-top: 1rem;
+
+  div {
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+
+    &.low { background: #22c55e; }
+    &.mid { background: #facc15; }
+    &.high { background: #ef4444; }
+  }
+}
+
+/* SECTION */
+.section {
+  margin-bottom: 3rem;
+
+  h3 {
+    margin-bottom: 1rem;
+  }
+}
+
+/* RECOMMEND */
+.section {
+  padding: 1rem 0;
+
+  h3 {
+    margin: 0 0 1rem 0; // tránh bị xuống dưới
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+}
+
+.recommend-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.recommend-card {
+  background: white;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+
+  img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+  }
+
+  .content {
+    padding: 1rem;
+
+    h4 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: #555;
+      margin: 0 0 0.5rem 0;
+    }
+
+    small {
+      color: #16a34a;
+      font-weight: 600;
+    }
+  }
+}

@@ -1,0 +1,108 @@
+<section class="hero">
+  <div class="hero-content">
+    <h1>Chào mừng đến với nền tảng CrowdFund</h1>
+    <!-- <h1>Chúc mừng năm mới 2026</h1> -->
+    <p>Đầu tư vào các dự án tiềm năng, an toàn và minh bạch.</p>
+    <div class="hero-buttons">
+      <button routerLink="/auth/register">Đăng ký</button>
+      <button routerLink="/auth/login">Đăng nhập</button>
+    </div>
+  </div>
+</section>
+
+<section class="projects">
+  <h2>Dự án mới nhất</h2>
+
+  <div class="projects-grid">
+    <div *ngFor="let project of projects" class="project-card">
+      <img [src]="project.image" alt="{{project.title}}" />
+      <h3>{{ project.title }}</h3>
+      <p>{{ project.short_description }}</p>
+
+      <div class="progress">
+        <div
+          class="progress-bar"
+          [style.width.%]="(project.raised / project.funding_target) * 100"
+        ></div>
+      </div>
+
+      <small>
+        {{ project.raised | currency }} /
+        {{ project.funding_target | currency }}
+      </small>
+
+      <a [routerLink]="['/projects', project.id]">Xem chi tiết</a>
+    </div>
+  </div>
+
+  <div class="view-all">
+    <a routerLink="/projects">Xem tất cả dự án</a>
+  </div>
+</section>
+
+<section class="join-owner">
+  <div class="join-content">
+    <h2>Trở thành chủ dự án của CrowdFund</h2>
+    <p>
+      Bạn có một ý tưởng tuyệt vời? Hãy biến nó thành dự án thực tế và kêu gọi
+      đầu tư từ cộng đồng.
+    </p>
+    <!-- <button (click)="joinAsProjectOwner()"> -->
+    <button routerLink="/auth/register">
+      Tham gia ngay
+    </button>
+  </div>
+</section>
+
+<section class="faq">
+  <h2>Câu hỏi thường gặp</h2>
+
+  <details class="faq-item">
+    <summary>Đầu tư trên nền tảng có an toàn không?</summary>
+    <p>Các dự án đều được thẩm định và đánh giá rủi ro.</p>
+  </details>
+
+  <details class="faq-item">
+    <summary>Tôi bắt đầu đầu tư như thế nào?</summary>
+    <p>Đăng ký tài khoản, hoàn thành hồ sơ và chọn dự án.</p>
+  </details>
+
+  <details class="faq-item">
+    <summary>Làm sao để theo dõi tiến độ dự án?</summary>
+    <p>Bạn có thể theo dõi qua trang cá nhân và email cập nhật.</p>
+  </details>
+</section>
+
+
+<section class="partners">
+  <h2>Đối tác của chúng tôi</h2>
+
+  <p class="partners-description">
+    CrowdFund hợp tác cùng các tập đoàn công nghệ hàng đầu thế giới,
+    cung cấp hạ tầng số, bảo mật và giải pháp công nghệ cho hệ sinh thái
+    đầu tư cộng đồng minh bạch và bền vững.
+  </p>
+
+  <div class="partners-logos">
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/960px-Apple_logo_black.svg.png"
+      alt="Apple"
+    />
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg"
+      alt="Google"
+    />
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg"
+      alt="Microsoft"
+    />
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
+      alt="Amazon"
+    />
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Meta_Platforms_Inc._logo.svg/2560px-Meta_Platforms_Inc._logo.svg.png"
+      alt="Meta"
+    />
+  </div>
+</section>

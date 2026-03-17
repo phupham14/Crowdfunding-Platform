@@ -1,0 +1,57 @@
+<section class="filter-panel">
+  <h2>Danh sách dự án</h2>
+
+  <div class="filters">
+    <div class="filter-item">
+      <label>Category</label>
+      <input [(ngModel)]="filters.category" (change)="onFilterChange()" placeholder="Ví dụ: Tech, Edu">
+    </div>
+
+    <div class="filter-item">
+      <label>Risk Level</label>
+      <input [(ngModel)]="filters.risk_level" (change)="onFilterChange()" placeholder="Low / Medium / High">
+    </div>
+
+    <div class="filter-item">
+      <label>Funding Target</label>
+      <input [(ngModel)]="filters.funding_target" (change)="onFilterChange()" placeholder=">= 100000">
+    </div>
+  </div>
+</section>
+
+<section class="projects-wrapper">
+  <div class="projects-grid">
+    <div *ngFor="let project of projects" class="project-card">
+      <div class="image-wrapper">
+        <img
+          [src]="project.image || 'https://cdn.shopify.com/s/files/1/0070/7032/articles/BestCrowdfundingSites_resized-03_ef0bf72c-3adf-4c18-bb6a-38635fb38f01.jpg?v=1764786604'"
+          alt="{{ project.name }}">
+        <span class="risk-badge" [ngClass]="getRiskClass(project.risk_level)">
+          {{ getRiskLabel(project.risk_level) }}
+        </span>
+      </div>
+
+      <div class="content">
+        <h3>{{ project.name }}</h3>
+        <p>{{ project.description || 'Không có mô tả' }}</p>
+
+        <!-- Progress info -->
+        <div class="funding-info">
+          <span>{{ getRaised(project) | number:'1.0-0' }}₫</span>
+          <span>/ {{ getFundingTarget(project) | number:'1.0-0' }}₫</span>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="progress-bar">
+          <div class="progress" [style.width.%]="getProgressPercent(project)">
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <a [routerLink]="['/project', project.id]">Xem chi tiết</a>
+      </div>
+    </div>
+  </div>
+
+</section>

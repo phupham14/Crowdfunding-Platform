@@ -1,0 +1,183 @@
+/* ===== Filter ===== */
+.filter-panel {
+  background: #f8fafc;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #e5e7eb;
+
+  h2 {
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
+  }
+
+  .filters {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+
+    .filter-item {
+      display: flex;
+      flex-direction: column;
+
+      label {
+        font-size: 0.85rem;
+        color: #374151;
+        margin-bottom: 0.3rem;
+      }
+
+      input {
+        padding: 0.6rem 0.75rem;
+        border-radius: 6px;
+        border: 1px solid #d1d5db;
+        outline: none;
+
+        &:focus {
+          border-color: #2563eb;
+        }
+      }
+    }
+  }
+}
+
+/* ===== Project Grid ===== */
+.projects-wrapper {
+  padding: 2rem;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); // 3 dự án / 1 hàng
+  gap: 1.5rem;
+}
+
+/* ===== Card ===== */
+.project-card {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  }
+
+  .image-wrapper {
+    height: 180px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .content {
+    padding: 1rem;
+    flex-grow: 1;
+
+    h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: #111827;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: #6b7280;
+      line-height: 1.4;
+    }
+  }
+
+  .actions {
+    padding: 1rem;
+    border-top: 1px solid #f1f5f9;
+    text-align: center;
+
+    a {
+      display: inline-block;
+      padding: 0.5rem 1.2rem;
+      background: #2563eb;
+      color: white;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      text-decoration: none;
+
+      &:hover {
+        background: #1d4ed8;
+      }
+    }
+  }
+
+    /* ===== Risk Badge ===== */
+    .risk-badge {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .risk-low {
+      background: #e6f4ea;
+      color: #137333;
+    }
+
+    .risk-medium {
+      background: #fff4e5;
+      color: #b45309;
+    }
+
+    .risk-high {
+      background: #fdecea;
+      color: #b91c1c;
+    }
+  
+    /* ===== Funding Info ===== */
+    .funding-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: #374151;
+      margin-top: 0.8rem;
+    }
+  
+    /* ===== Progress Bar ===== */
+    .progress-bar {
+      margin-top: 0.4rem;
+      height: 8px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      overflow: hidden;
+  
+      .progress {
+        height: 100%;
+        background: linear-gradient(90deg, #2563eb, #3b82f6);
+        transition: width 0.4s ease;
+      }
+    }
+
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1024px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, 1fr); // tablet: 2 cột
+  }
+
+  .filter-panel .filters {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .projects-grid {
+    grid-template-columns: 1fr; // mobile: 1 cột
+  }
+
+  .filter-panel .filters {
+    grid-template-columns: 1fr;
+  }
+}

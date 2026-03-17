@@ -1,0 +1,106 @@
+:host {
+  display: block;
+}
+
+h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #111827;
+}
+
+/* trạng thái */
+.loading,
+.error {
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.loading {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.error {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* grid report */
+.report-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+/* card */
+.card {
+  background: #ffffff;
+  padding: 22px 24px;
+  border-radius: 14px;
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.04),
+    0 10px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* hover effect */
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 10px 15px rgba(0, 0, 0, 0.08),
+    0 20px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* title */
+.card h3 {
+  font-size: 14px;
+  font-weight: 500;
+  color: #6b7280;
+  margin-bottom: 10px;
+}
+
+/* value */
+.card p {
+  font-size: 26px;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* accent bar (admin style) */
+.card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 6px;
+  background: linear-gradient(
+    to bottom,
+    #6366f1,
+    #3b82f6
+  );
+  border-radius: 6px 0 0 6px;
+}
+
+/* responsive */
+@media (max-width: 768px) {
+  .card p {
+    font-size: 22px;
+  }
+}
+
+/* Chart */
+.chart-wrapper {
+  margin-top: 32px;
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow:
+    0 4px 6px rgba(0, 0, 0, 0.04),
+    0 10px 15px rgba(0, 0, 0, 0.05);
+}

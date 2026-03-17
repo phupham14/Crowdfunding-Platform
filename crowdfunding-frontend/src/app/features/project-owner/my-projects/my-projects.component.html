@@ -1,0 +1,32 @@
+<div class="my-projects">
+  <h2>My Projects</h2>
+
+  <button routerLink="/project-owner/create">
+    Create New Project
+  </button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Status</th>
+        <th>Funding Progress</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let project of projects">
+        <td>{{ project.name }}</td>
+        <td>{{ project.status | titlecase }}</td>
+        <td>
+          {{ project.raised | currency:'VND' }} /
+          {{ project.funding_target | currency:'VND' }}
+        </td>
+        <td>
+          <button (click)="goToDetail(project.id)">Detail</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,88 @@
+<!-- app.component.html -->
+
+<header class="header">
+  <div class="logo" routerLink="/landing" style="cursor: pointer;">CrowdFund</div>
+
+  <nav class="nav-links">
+
+    <a routerLink="/landing">Home</a>
+    <a routerLink="/projects">Projects</a>
+
+    <!-- INVESTOR -->
+    <!-- INVESTOR DASHBOARD DROPDOWN -->
+    <div *ngIf="authService.getUserRole() === 'INVESTOR'"
+        class="nav-dropdown"
+        (mouseenter)="dashboardOpen = true"
+        (mouseleave)="dashboardOpen = false">
+
+      <span class="nav-link">
+        Dashboard ▾
+      </span>
+
+      <div class="dropdown-menu" *ngIf="dashboardOpen">
+        <a routerLink="/investor/dashboard">Overview</a>
+        <a routerLink="/reports/portfolio">Portfolio</a>
+        <a routerLink="/reports/revenue">Revenue Report</a>
+      </div>
+    </div>
+
+    <!-- Transactions -->
+    <a *ngIf="authService.isLoggedIn()"
+       routerLink="/transactions/wallet">
+      Wallet
+    </a>
+
+    <!-- PROFILE -->
+    <a *ngIf="authService.getUserRole() === 'INVESTOR'"
+       routerLink="/risk-profiles">
+      Profile
+    </a>
+
+    <!-- CHƯA LOGIN -->
+    <ng-container *ngIf="!authService.isLoggedIn()">
+      <a routerLink="/auth/login" class="btn-outline">Login</a>
+      <a routerLink="/auth/register" class="btn-primary">Register</a>
+    </ng-container>
+
+    <!-- ĐÃ LOGIN -->
+    <div *ngIf="authService.isLoggedIn()" class="user-menu">
+      <div class="user-icon" (click)="toggleDropdown()">👤</div>
+
+      <div class="dropdown" *ngIf="dropdownOpen">
+        <button (click)="goToDashboard()">Dashboard</button>
+        <button class="logout" (click)="logout()">Logout</button>
+      </div>
+    </div>
+
+  </nav>
+</header>
+
+<!-- Router outlet hiển thị tất cả các page của project -->
+<router-outlet></router-outlet>
+
+
+<footer class="footer">
+  <div class="footer-content">
+    <div>
+      <h4>CrowdFund</h4>
+      <p>Nền tảng đầu tư cộng đồng minh bạch và an toàn.</p>
+    </div>
+
+    <div>
+      <h4>Liên kết</h4>
+      <a routerLink="/projects">Dự án</a>
+      <a routerLink="/auth/login">Đăng nhập</a>
+      <a routerLink="/auth/register">Đăng ký</a>
+    </div>
+
+    <div>
+      <h4>Liên hệ</h4>
+      <p>Email: support@crowdfund.vn</p>
+      <p>Hotline: 0123 456 789</p>
+    </div>
+  </div>
+
+  <p class="copyright">
+    © 2025 CrowdFund. All rights reserved.
+  </p>
+</footer>

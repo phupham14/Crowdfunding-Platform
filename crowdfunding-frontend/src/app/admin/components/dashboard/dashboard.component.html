@@ -1,0 +1,39 @@
+<h2>Admin Dashboard</h2>
+
+<div class="dashboard-cards">
+  <div class="card">
+    <h3>Tổng Users</h3>
+    <p>{{ totalUsers }}</p>
+  </div>
+
+  <div class="card">
+    <h3>Tổng tiền đầu tư</h3>
+    <p>{{ totalInvestment | currency:'VND':'symbol':'1.0-0' }}</p>
+  </div>
+
+  <div class="card">
+    <h3>Project Pending</h3>
+    <p>{{ pendingProjects }}</p>
+  </div>
+</div>
+
+<!-- 🔹 QUICK ACTIONS -->
+<h3 class="section-title">Admin Actions</h3>
+
+<div class="admin-actions">
+  <button class="action-btn" routerLink="/admin/projects">
+    📁 Quản lý Projects
+  </button>
+
+  <button class="action-btn" routerLink="/admin/users">
+    👤 Quản lý Users
+  </button>
+
+  <button class="action-btn" routerLink="/admin/transactions">
+    💰 Transactions
+  </button>
+
+  <button class="action-btn" routerLink="/admin/reports">
+    📊 System Reports
+  </button>
+</div>

@@ -1,0 +1,83 @@
+<h2>User Management</h2>
+
+<div class="filters">
+  <select [(ngModel)]="filterLocked" (change)="onFilterChange()">
+    <option value="">All Users</option>
+    <option value="false">Active</option>
+    <option value="true">Locked</option>
+  </select>
+
+  <select [(ngModel)]="filterRole" (change)="onFilterChange()">
+    <option value="">All Roles</option>
+    <option value="ADMIN">Admin</option>
+    <option value="PROJECT_OWNER">Project Owner</option>
+    <option value="INVESTOR">Investor</option>
+  </select>
+</div>
+
+<div *ngIf="loading" class="loading">Loading...</div>
+<div *ngIf="error" class="error">{{ error }}</div>
+
+<table *ngIf="!loading && users.length" class="user-table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Role</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{ user.id }}</td>
+      <td>{{ user.full_name}}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.role }}</td>
+      <td>
+        <span class="status" [class.locked]="user.locked">
+          {{ user.locked ? 'Locked' : 'Active' }}
+        </span>
+      </td>
+      <td>
+        <button (click)="viewDetail(user)">View</button>
+        <button (click)="toggleLock(user)">
+          {{ user.locked ? 'Unlock' : 'Lock' }}
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="!loading && users.length === 0">
+  Không có user nào.
+</div>
+
+<!-- Pagination -->
+<div class="pagination" *ngIf="totalPages > 1">
+  <button [disabled]="currentPage === 1"
+          (click)="loadUsers(currentPage - 1)">
+    ◀ Prev
+  </button>
+
+  <span>Page {{ currentPage }} / {{ totalPages }}</span>
+
+  <button [disabled]="currentPage === totalPages"
+          (click)="loadUsers(currentPage + 1)">
+    Next ▶
+  </button>
+</div>
+
+<!-- User Detail Modal -->
+<div class="modal-backdrop" *ngIf="selectedUser">
+  <div class="modal">
+    <h3>User Detail</h3>
+    <p><b>ID:</b> {{ selectedUser.id }}</p>
+    <p><b>Name:</b> {{ selectedUser.full_name }}</p>
+    <p><b>Email:</b> {{ selectedUser.email }}</p>
+    <p><b>Status:</b> {{ selectedUser.locked ? 'Locked' : 'Active' }}</p>
+
+    <button (click)="closeDetail()">Close</button>
+  </div>
+</div>

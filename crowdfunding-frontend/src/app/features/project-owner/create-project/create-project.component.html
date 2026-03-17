@@ -1,0 +1,23 @@
+<div class="create-project">
+  <h2>Create Project</h2>
+
+  <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+
+    <input formControlName="title" placeholder="Project Title"/>
+
+    <textarea formControlName="description" placeholder="Description"></textarea>
+
+    <input type="number" formControlName="funding_target" placeholder="Funding Target (VND)"/>
+
+    <input formControlName="category" placeholder="Category"/>
+
+    <input formControlName="image" placeholder="Image URL"/>
+
+    <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+    <button type="submit" [disabled]="isSubmitting || projectForm.invalid">
+      {{ isSubmitting ? 'Creating...' : 'Create' }}
+    </button>
+
+  </form>
+</div>

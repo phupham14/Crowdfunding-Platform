@@ -1,0 +1,104 @@
+<div class="project-detail" *ngIf="project">
+
+  <!-- Header -->
+  <div class="card header">
+    <div class="title-row">
+      <h2>{{ project.name }}</h2>
+
+      <span class="status-badge" [ngClass]="project.status.toLowerCase()">
+        {{ project.status }}
+      </span>
+    </div>
+
+    <p class="description">{{ project.description }}</p>
+  </div>
+
+  <!-- Stats -->
+  <div class="card stats">
+    <ul>
+      <li>
+        <span>Funding Target</span>
+        <strong>{{ project.funding_target | currency:'VND' }}</strong>
+      </li>
+      <li>
+        <span>Raised</span>
+        <strong>{{ project.raised | currency:'VND' }}</strong>
+      </li>
+      <li>
+        <span>Investors</span>
+        <strong>{{ project.investor_count }}</strong>
+      </li>
+    </ul>
+
+    <!-- Progress bar -->
+    <div class="progress">
+      <div class="progress-bar" [style.width.%]="(project.raised / project.funding_target) * 100">
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart -->
+  <div class="card chart-container">
+    <canvas baseChart [data]="fundingChartData" [options]="fundingChartOptions" chartType="doughnut">
+    </canvas>
+  </div>
+
+  <!-- Investment Info -->
+  <div class="card info">
+    <h3>Investment Info</h3>
+
+    <ul class="info-list">
+      <li>
+        <span>Min Investment</span>
+        <strong>{{ project.min_invest_amount | currency:'VND' }}</strong>
+      </li>
+
+      <li *ngIf="project.max_invest_amount">
+        <span>Max Investment</span>
+        <strong>{{ project.max_invest_amount | currency:'VND' }}</strong>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Timeline -->
+  <div class="card timeline">
+    <h3>Funding Timeline</h3>
+
+    <div class="timeline-row">
+      <div>
+        <span>Start Date</span>
+        <strong>{{ project.start_at | date:'dd/MM/yyyy' }}</strong>
+      </div>
+
+      <div>
+        <span>End Date</span>
+        <strong>{{ project.end_at | date:'dd/MM/yyyy' }}</strong>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Actions -->
+  <div class="card actions">
+    <div class="action-buttons">
+      <button class="secondary" (click)="goToEdit()">
+        Update Project
+      </button>
+
+      <button *ngIf="project.status === 'OPEN'" class="danger" (click)="changeProjectStatus('CLOSED')">
+        Close Project
+      </button>
+
+      <button *ngIf="project.status === 'CLOSED'" class="success" (click)="changeProjectStatus('OPEN')">
+        Reopen Project
+      </button>
+
+      <!-- Delete Button -->
+      <button class="danger-outline" (click)="deleteProject()" title="Xóa dự án">
+        Delete Project
+      </button>
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,73 @@
+<section class="dashboard">
+
+  <!-- HEADER -->
+  <div class="dashboard-header">
+    <h2>Investor Dashboard</h2>
+    <p>Tổng quan hoạt động đầu tư của bạn</p>
+  </div>
+
+  <!-- KPI CARDS -->
+  <div class="kpi-grid">
+    <div class="kpi-card green">
+      <span class="label">Tổng tiền đã đầu tư</span>
+      <span class="value">{{ totalInvested | currency }}</span>
+    </div>
+
+    <div class="kpi-card blue">
+      <span class="label">Dự án đang tham gia</span>
+      <span class="value">{{ activeProjects }}</span>
+    </div>
+
+    <div class="kpi-card orange">
+      <span class="label">Risk Tier</span>
+      <span class="value">{{ riskTier }}</span>
+    </div>
+
+    <div class="kpi-card purple">
+      <span class="label">ROI ước tính</span>
+      <span class="value">{{ estimatedROI }}%</span>
+    </div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="charts-grid">
+    <div class="chart-card">
+      <h3>Tiến trình đầu tư</h3>
+      <canvas id="investmentChart"></canvas>
+    </div>
+
+    <div class="chart-card">
+      <h3>Phân bổ theo rủi ro</h3>
+      <div class="fake-pie">
+        <div><span class="dot low"></span> Low Risk</div>
+        <div><span class="dot mid"></span> Medium Risk</div>
+        <div><span class="dot high"></span> High Risk</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECOMMENDATIONS -->
+  <div class="section">
+    <h3>Khuyến nghị dành cho bạn</h3>
+
+    <p *ngIf="recommendedProjects.length === 0" style="color:red">
+      ❌ Không có project gợi ý
+    </p>
+
+    <div class="recommend-grid">
+      <div class="recommend-card" *ngFor="let project of recommendedProjects" (click)="goToProject(project.id)">
+        <img
+          [src]="project.image || 'https://cdn.shopify.com/s/files/1/0070/7032/articles/BestCrowdfundingSites_resized-03_ef0bf72c-3adf-4c18-bb6a-38635fb38f01.jpg?v=1764786604'" />
+  
+        <div class="content">
+          <h4>{{ project.name }}</h4>
+          <p>{{ project.description }}</p>
+          <p>{{ project.category }} · APR {{ project.apr_expected }}%</p>
+          <small>✔ Phù hợp Risk Tier {{ riskTier }}</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</section>

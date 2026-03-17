@@ -1,0 +1,77 @@
+<h2>Project Moderation</h2>
+
+<div class="filters">
+  <label>
+    Status:
+    <select [(ngModel)]="filterStatus" (change)="onFilterChange()">
+      <option value="PENDING">PENDING</option>
+      <option value="OPEN">OPEN</option>
+      <option value="REJECTED">REJECTED</option>
+      <option value="CLOSED">CLOSED</option>
+      <option value="CANCELLED">CANCELLED</option>
+    </select>
+  </label>
+
+  <!-- <label>
+    Type:
+    <select [(ngModel)]="filterType" (change)="onFilterChange()">
+      <option value="">All</option>
+      <option value="FUND_IN">Fund In</option>
+      <option value="INVEST">Invest</option>
+    </select>
+  </label> -->
+</div>
+
+<div *ngIf="loading" class="loading">Loading...</div>
+<div *ngIf="error" class="error">{{ error }}</div>
+
+<table *ngIf="projects.length > 0" class="project-table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Title</th>
+      <th>Owner</th>
+      <th>Type</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let project of projects">
+      <td>{{ project.id }}</td>
+      <td>{{ project.name }}</td>
+      <td>{{ project.funding_target }}</td>
+      <td>{{ project.raised }}</td>
+      <td>{{ project.status }}</td>
+      <td>
+        <button *ngIf="project.status === 'PENDING'" (click)="approveProject(project.id.toString())">
+          Approve
+        </button>
+
+        <button *ngIf="project.status === 'PENDING'" (click)="rejectProject(project.id.toString())">
+          Reject
+        </button>
+    </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="pagination">
+  <button
+    [disabled]="currentPage === 1"
+    (click)="loadProjects(currentPage - 1)">
+    ◀ Prev
+  </button>
+
+  <span>Page {{ currentPage }} / {{ Math.ceil(totalItems / pageSize) }}</span>
+
+  <button
+    [disabled]="currentPage >= totalItems / pageSize"
+    (click)="loadProjects(currentPage + 1)">
+    Next ▶
+  </button>
+</div>
+
+<div *ngIf="!loading && projects.length === 0">
+  Không có project nào.
+</div>

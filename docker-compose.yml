@@ -1,0 +1,55 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./Backend/crowdfunding_project
+      dockerfile: Dockerfile
+    container_name: django_backend
+    command: sh -c "./wait-for-db.sh db python manage.py migrate && python manage.py runserver 0.0.0.0:8080"
+    volumes:
+      - ./Backend/crowdfunding_project:/app
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./crowdfunding-frontend
+      dockerfile: Dockerfile
+    container_name: angular_frontend
+    volumes:
+      - ./crowdfunding-frontend:/app
+    ports:
+      - "4200:4200"
+    environment:
+      - API_URL=http://django_backend:8080
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

@@ -1,0 +1,21 @@
+# Core
+Django>=4.2
+
+# REST API
+djangorestframework>=3.14
+djangorestframework-simplejwt>=5.3
+
+# CORS
+django-cors-headers>=4.3
+
+# Database
+psycopg2-binary>=2.9
+
+# Machine Learning / Prediction
+numpy>=1.24
+scikit-learn>=1.3
+xgboost>=1.7
+joblib>=1.3
+
+# Utility
+python-dotenv>=1.0  # nếu dùng .env file

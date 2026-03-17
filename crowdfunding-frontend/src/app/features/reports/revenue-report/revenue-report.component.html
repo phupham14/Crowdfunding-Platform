@@ -1,0 +1,22 @@
+<h2>💰 Revenue Report</h2>
+
+<div class="summary">
+  <div class="card">
+    <h3>Total Invested</h3>
+    <p>{{ totalInvested | currency:'VND' }}</p>
+  </div>
+  <div class="card">
+    <h3>Estimated Profit</h3>
+    <p>{{ estimatedProfit | currency:'VND' }}</p>
+  </div>
+  <div class="card">
+    <h3>Profit Rate</h3>
+    <p>{{ profitRate }}%</p>
+  </div>
+</div>
+
+<div class="charts">
+  <canvas baseChart [data]="profitRateData" [options]="profitRateOptions" chartType="doughnut"></canvas>
+  <canvas baseChart [data]="profitBarData" chartType="bar"></canvas>
+  <!-- <canvas baseChart [data]="profitLineData" [options]="profitLineOptions" chartType="line"></canvas> -->
+</div>

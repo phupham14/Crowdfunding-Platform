@@ -1,0 +1,107 @@
+.wallet-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+/* BALANCE */
+.balance-card {
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+
+  .label {
+    font-size: 14px;
+    opacity: 0.8;
+  }
+
+  h2 {
+    margin: 0.5rem 0 0;
+    font-size: 28px;
+  }
+}
+
+.wallet-message {
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  font-size: 14px;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  display: inline-block; /* hoặc block tuỳ layout */
+  max-width: 100%;
+
+  &.error {
+    color: #ef4444;
+    background-color: #fee2e2; /* nhạt hơn đỏ */
+    border-color: #fca5a5;
+  }
+
+  &.success {
+    color: #22c55e;
+    background-color: #dcfce7; /* nhạt hơn xanh */
+    border-color: #bbf7d0;
+  }
+}
+
+
+/* ACTIONS */
+.wallet-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.action-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+
+  h3 {
+    margin-bottom: 1rem;
+  }
+
+  input {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    margin-bottom: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    font-size: 14px;
+
+    &:focus {
+      outline: none;
+      border-color: #6366f1;
+    }
+  }
+
+  button {
+    width: 100%;
+    padding: 0.7rem;
+    border-radius: 10px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+}
+
+.fund-in button {
+  background: #22c55e;
+  color: white;
+
+  &:hover {
+    background: #16a34a;
+  }
+}
+
+.withdraw button {
+  background: #ef4444;
+  color: white;
+
+  &:hover {
+    background: #dc2626;
+  }
+}
