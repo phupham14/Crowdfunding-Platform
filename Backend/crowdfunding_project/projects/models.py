@@ -13,6 +13,14 @@ class Project(models.Model):
         ("PENDING", "Pending Approval"),
     )
 
+    RISK_CHOICES = [
+        (1, "Low"),
+        (2, "Medium"),
+        (3, "Medium"),
+        (4, "High"),
+        (5, "High"),
+    ]
+
     id = models.BigAutoField(primary_key=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 

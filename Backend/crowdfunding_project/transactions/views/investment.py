@@ -1,4 +1,5 @@
 from django.db import transaction
+from interactions.models import UserInteraction
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -36,6 +37,12 @@ class ProjectInvestmentAPIView(APIView):
         serializer = TransactionSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         amount = serializer.validated_data["amount"]
+        UserInteraction.objects.create(
+            user=request.user,
+            project=project,
+            interaction_type="invest",
+            value=5
+        )
 
         # 4️⃣ Business rules
         if amount <= 0:

@@ -7,6 +7,7 @@ export interface Project {
   raised: number;
 
   expected_return?: number;
+  liquidity_score?: number;
   risk_level?: 'LOW' | 'MEDIUM' | 'HIGH';
 
   start_date: string;
@@ -15,4 +16,5 @@ export interface Project {
   status: 'OPEN' | 'PENDING' | 'CLOSED' | 'REJECTED';
 
   created_at: string;
+  updated_at: string;
 }

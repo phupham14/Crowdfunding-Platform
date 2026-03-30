@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'adminpanel',
     'reports',
     'risk_profiles',
+    'interactions',
     'django_filters',
 ]
 

@@ -1,3 +1,6 @@
+from openai import project
+
+from interactions.models import UserInteraction
 from rest_framework import viewsets, filters
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import action
@@ -9,6 +12,8 @@ from django.core.exceptions import PermissionDenied
 from projects.models import Project
 from projects.serializers.project import ProjectSerializer
 from accounts.permission import IsProjectOwner
+from risk_profiles.views.risk_evaluation import calculate_all_scores, map_risk_level
+from django.db.models import Q
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
@@ -18,57 +23,64 @@ class ProjectViewSet(viewsets.ModelViewSet):
     search_fields = ["name", "category", "location"]
     ordering_fields = ["funding_target", "created_at"]
 
-    def get_permissions(self):
-        """
-        Quyền theo action:
-        - create/update/destroy/change_status: ProjectOwner
-        - list/retrieve: public
-        """
-        if self.action in ['create', 'update', 'partial_update', 'destroy', 'change_status']:
-            return [IsAuthenticated(), IsProjectOwner()]
-        elif self.action in ['list', 'retrieve']:
-            return [AllowAny()]
-        return super().get_permissions()
-
-    def get_object(self):
-        pk = self.kwargs.get('pk')
-        try:
-            project = Project.objects.get(pk=pk)
-        except Project.DoesNotExist:
-            raise Http404
-
+    # Permission: anyone can view, only authenticated can create/update
+    def get_queryset(self):
         user = self.request.user
 
-        # Admin → xem tất cả
+        # Admin → thấy tất cả
         if user.is_authenticated and user.role == "ADMIN":
-            return project
+            return Project.objects.all()
 
-        # Project owner → xem project của mình (mọi trạng thái)
-        if user.is_authenticated and project.owner == user:
-            return project
+        # User → thấy project của mình + project OPEN
+        if user.is_authenticated:
+            return Project.objects.filter(
+                Q(owner=user) | Q(status="OPEN")
+            )
 
-        # Public → chỉ xem OPEN
-        if project.status == 'OPEN':
-            return project
+        # Public → chỉ OPEN
+        return Project.objects.filter(status="OPEN")
 
-        # Còn lại → cấm
-        raise PermissionDenied("Bạn không có quyền xem project này")
-
-    def get_queryset(self):
-        qs = Project.objects.all()
-
-        if self.action == 'list':
-            return qs.filter(status='OPEN')
-
-        return qs
-
-
+    # Override create để tính score khi tạo project
     def perform_create(self, serializer):
-        # Tự động gán owner khi tạo project
-        serializer.save(
+        project = serializer.save(
             owner=self.request.user,
             status="PENDING"
         )
+
+        scores = calculate_all_scores(project)
+
+        project.expected_return_score = scores["expected_return_score"]
+        project.liquidity_score = scores["liquidity_score"]
+        risk_score = scores["risk_score"]
+        project.risk_level = map_risk_level(risk_score)
+
+        project.save(update_fields=[
+            "expected_return_score",
+            "liquidity_score",  
+            "risk_level"
+        ])
+
+    # Override retrieve để log interaction
+    def retrieve(self, request, *args, **kwargs):
+        project = self.get_object()
+
+        if request.user.is_authenticated:
+            UserInteraction.objects.create(
+                user=request.user,
+                project=project,
+                interaction_type="view",
+                source="detail_page"
+            )
+
+            UserInteraction.objects.create(
+                user=request.user,
+                project=project,
+                interaction_type="click",
+                source="detail_page"
+            )
+
+        serializer = self.get_serializer(project)
+        return Response(serializer.data)
 
     # Chỉ project owner mới được đổi status
     @action(detail=True, methods=['post'], url_path='change-status')

@@ -3,7 +3,7 @@ from ..models import Project
 
 class ProjectSerializer(serializers.ModelSerializer):
     owner_name = serializers.CharField(source="owner.full_name", read_only=True)
-    
+
     class Meta:
         model = Project
         # Không expose field owner cho client

@@ -9,7 +9,18 @@
 
     <input type="number" formControlName="funding_target" placeholder="Funding Target (VND)"/>
 
-    <input formControlName="category" placeholder="Category"/>
+    <input formControlName="location" placeholder="Location"/>
+
+    <input type="date" formControlName="start_date" placeholder="Start Date"/>
+    
+    <input type="date" formControlName="end_date" placeholder="End Date"/>
+
+    <select formControlName="category">
+      <option value="">-- Select Category --</option>
+      <option *ngFor="let cat of categories" [value]="cat.name">
+        {{ cat.name }}
+      </option>
+    </select>
 
     <input formControlName="image" placeholder="Image URL"/>
 
