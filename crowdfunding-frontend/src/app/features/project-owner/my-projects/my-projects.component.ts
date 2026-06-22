@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProjectService } from 'src/app/core/services/project.service';
 import { Router } from '@angular/router';
+import { Project } from 'src/app/core/models/project.model';
 
 @Component({
   selector: 'app-my-projects',
@@ -8,7 +9,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./my-projects.component.scss']
 })
 export class MyProjectsComponent implements OnInit {
-  projects: any[] = [];
+  projects: Project[] = [];
 
   constructor(private projectService: ProjectService, private router: Router) {}
 
@@ -18,5 +19,9 @@ export class MyProjectsComponent implements OnInit {
 
   goToDetail(id: number) {
     this.router.navigate(['/project-owner/detail', id]);
+  }
+
+  getRemaining(project: Project): number {
+    return (project.raised || 0) - (project.total_repaid || 0);
   }
 }

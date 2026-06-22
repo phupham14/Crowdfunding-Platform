@@ -1,15 +1,15 @@
 #!/bin/sh
-# wait-for-db.sh
 set -e
 
-host="$1"
-shift
-cmd="$@"
+host="${DB_HOST:-localhost}"
+port="${DB_PORT:-5432}"
+user="${DB_USER:-postgres}"
+database="${DB_NAME:-postgres}"
 
-until PGPASSWORD=$POSTGRES_PASSWORD psql -h "$host" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c '\q'; do
-  echo "Postgres is unavailable - sleeping"
+until PGPASSWORD="$DB_PASSWORD" psql -h "$host" -p "$port" -U "$user" -d "$database" -c '\q'; do
+  echo "Postgres is unavailable at $host:$port - sleeping"
   sleep 2
 done
 
 echo "Postgres is up - executing command"
-exec $cmd
+exec "$@"

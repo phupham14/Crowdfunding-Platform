@@ -7,6 +7,13 @@ class ProjectPermission(BasePermission):
             return True
 
         # Các action cần login
+        if view.action == "create":
+            return (
+                request.user
+                and request.user.is_authenticated
+                and request.user.role == "PROJECT_OWNER"
+            )
+
         return request.user and request.user.is_authenticated
 
     def has_object_permission(self, request, view, obj):

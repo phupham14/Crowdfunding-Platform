@@ -51,8 +51,12 @@ export class ProjectService {
   // Lấy danh sách dự án được đề xuất cho người dùng
   getRecommendations() {
     return this.http.get<any[]>(
-      `${this.baseUrl}recommendations/`
+      `${this.baseUrl}recommendations/?top_n=6&candidate_limit=100`
     );
+  }
+
+  getPopularProjects(topN = 6): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}popular/?top_n=${topN}`);
   }
 
 }

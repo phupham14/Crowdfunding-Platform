@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Transaction } from '../models/transaction.model';
 import { map } from 'rxjs/operators';
+
+import { FundInResponse } from '../models/fundin.model';
 import { Wallet } from '../models/wallet.model';
 import { environment } from 'src/environments/environment';
 
@@ -12,35 +13,36 @@ export class TransactionService {
 
   constructor(private http: HttpClient) {}
 
-  // Wallet
   getBalance(): Observable<Wallet> {
     return this.http.get<Wallet>(`${environment.apiUrl}/accounts/wallet/`);
   }
 
-  // Fund In
   fundIn(payload: { amount: number; description?: string; type: 'FUND_IN' }) {
-    return this.http.post(`${this.baseUrl}fund-in/`, payload);
+    return this.http.post<FundInResponse>(`${this.baseUrl}fund-in/`, payload);
   }
 
-  // Withdraw
-  withdraw(payload: {
-    amount: number;
-    description?: string;
-    type: 'WITHDRAW';
-  }) {
-    return this.http.post(`${this.baseUrl}withdraw/`, payload);
-  }
-
-  // Invest
   invest(projectId: number, amount: number): Observable<any> {
     return this.http.post(`${this.baseUrl}projects/${projectId}/invest/`, {
       amount,
-      type: 'INVEST', // bắt buộc match serializer choices
-      description: 'Investment', // optional
+      type: 'INVEST',
+      description: 'Investment',
     });
   }
 
-  // Transaction history, filter theo type (INVEST / FUND_IN / WITHDRAW)
+  disburseProject(projectId: number): Observable<any> {
+    return this.http.post(`${this.baseUrl}projects/${projectId}/disburse/`, {});
+  }
+
+  repayProject(projectId: number, amount: number): Observable<any> {
+    return this.http.post(`${this.baseUrl}projects/${projectId}/repay/`, {
+      amount,
+    });
+  }
+
+  confirmPayment(paymentIntentId: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}confirm-payment/`, { paymentIntentId });
+  }
+
   getTransactions(): Observable<any[]> {
     return this.http.get<any>(`${this.baseUrl}history/?type=INVEST`).pipe(
       map((res) => {

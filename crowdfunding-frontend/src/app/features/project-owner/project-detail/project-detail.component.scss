@@ -39,7 +39,28 @@
   color: #1e7f45;
 }
 
-.status-badge.closed {
+.status-badge.funded {
+  background: #eff6ff;
+  color: #1d4ed8;
+}
+
+.status-badge.repaying {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.status-badge.completed {
+  background: #ecfdf3;
+  color: #047857;
+}
+
+.status-badge.pending {
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+.status-badge.cancelled,
+.status-badge.rejected {
   background: #fdecea;
   color: #b42318;
 }
@@ -126,11 +147,35 @@
 
 /* Actions */
 .actions {
+  .success-message {
+    color: #047857;
+    margin-bottom: 12px;
+  }
+
+  .error-message {
+    color: #b42318;
+    margin-bottom: 12px;
+  }
+
   .action-buttons {
     display: flex;
     justify-content: flex-end;
     gap: 12px;
     flex-wrap: wrap;
+  }
+
+  .repayment-form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 320px;
+  }
+
+  .repayment-form input {
+    padding: 12px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
   }
 
   button {

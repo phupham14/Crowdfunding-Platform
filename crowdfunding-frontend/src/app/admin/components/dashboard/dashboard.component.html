@@ -1,4 +1,4 @@
-<h2>Admin Dashboard</h2>
+<h2>Trang Admin</h2>
 
 <div class="dashboard-cards">
   <div class="card">
@@ -12,28 +12,31 @@
   </div>
 
   <div class="card">
-    <h3>Project Pending</h3>
+    <h3>Dự án đang chờ</h3>
     <p>{{ pendingProjects }}</p>
   </div>
 </div>
 
-<!-- 🔹 QUICK ACTIONS -->
-<h3 class="section-title">Admin Actions</h3>
+<h3 class="section-title">Hành động nhanh</h3>
 
 <div class="admin-actions">
   <button class="action-btn" routerLink="/admin/projects">
-    📁 Quản lý Projects
+    Quản lý Projects
   </button>
 
   <button class="action-btn" routerLink="/admin/users">
-    👤 Quản lý Users
+    Quản lý Users
+  </button>
+
+  <button class="action-btn" routerLink="/admin/project-owner-applications">
+    Duyệt Project Owner
   </button>
 
   <button class="action-btn" routerLink="/admin/transactions">
-    💰 Transactions
+    Quản lý giao dịch
   </button>
 
   <button class="action-btn" routerLink="/admin/reports">
-    📊 System Reports
+    Báo cáo hệ thống
   </button>
 </div>

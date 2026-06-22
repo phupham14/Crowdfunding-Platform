@@ -1,22 +1,71 @@
-<h2>💰 Revenue Report</h2>
+<h2>Báo cáo doanh thu</h2>
 
-<div class="summary">
+<div *ngIf="loading" class="loading">Loading...</div>
+<div *ngIf="error" class="error">{{ error }}</div>
+
+<div class="summary" *ngIf="!loading && !error">
   <div class="card">
-    <h3>Total Invested</h3>
-    <p>{{ totalInvested | currency:'VND' }}</p>
+    <h3>Tổng số tiền đầu tư</h3>
+    <p>{{ totalInvested | currency:'VND':'symbol':'1.0-0' }}</p>
   </div>
+
   <div class="card">
-    <h3>Estimated Profit</h3>
-    <p>{{ estimatedProfit | currency:'VND' }}</p>
+    <h3>Ước lượng lợi nhuận</h3>
+    <p>{{ estimatedProfit | currency:'VND':'symbol':'1.0-0' }}</p>
   </div>
+
   <div class="card">
-    <h3>Profit Rate</h3>
-    <p>{{ profitRate }}%</p>
+    <h3>Tỷ lệ lợi nhuận</h3>
+    <p>{{ profitRate | number:'1.0-2' }}%</p>
   </div>
 </div>
 
-<div class="charts">
-  <canvas baseChart [data]="profitRateData" [options]="profitRateOptions" chartType="doughnut"></canvas>
-  <canvas baseChart [data]="profitBarData" chartType="bar"></canvas>
-  <!-- <canvas baseChart [data]="profitLineData" [options]="profitLineOptions" chartType="line"></canvas> -->
-</div>
+<section class="charts" *ngIf="!loading && !error">
+  <div class="chart-card chart-card-wide">
+    <div class="chart-title">
+      <h3>Dòng tiền và lợi nhuận</h3>
+      <span>Currency bar</span>
+    </div>
+
+    <div class="chart-wrapper">
+      <canvas
+        baseChart
+        [data]="valueComparisonData"
+        [options]="valueComparisonOptions"
+        chartType="bar">
+      </canvas>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-title">
+      <h3>Tỷ lệ lợi nhuận</h3>
+      <span>ROI</span>
+    </div>
+
+    <div class="chart-wrapper">
+      <canvas
+        baseChart
+        [data]="profitRateData"
+        [options]="profitRateOptions"
+        chartType="doughnut">
+      </canvas>
+    </div>
+  </div>
+
+  <div class="chart-card" *ngIf="revenueTrendData">
+    <div class="chart-title">
+      <h3>Xu hướng doanh thu</h3>
+      <span>Line chart</span>
+    </div>
+
+    <div class="chart-wrapper">
+      <canvas
+        baseChart
+        [data]="revenueTrendData"
+        [options]="revenueTrendOptions"
+        chartType="line">
+      </canvas>
+    </div>
+  </div>
+</section>

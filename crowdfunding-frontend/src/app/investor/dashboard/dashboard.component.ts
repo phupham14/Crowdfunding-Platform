@@ -25,6 +25,8 @@ export class DashboardComponent implements OnInit {
   activeInvestments: any[] = [];
   recommendedProjects: any[] = [];
   transactions: any[] = [];
+  isLoadingRecommendations = false;
+  recommendationError = '';
 
   constructor(
     private router: Router,
@@ -44,13 +46,26 @@ export class DashboardComponent implements OnInit {
   }
 
   loadRecommendations() {
-    this.projectService.getRecommendations().subscribe((res: any) => {
-      console.log('RECOMMEND API:', res);
+    this.isLoadingRecommendations = true;
+    this.recommendationError = '';
+
+    this.projectService.getRecommendations().subscribe({
+      next: (res: any) => {
+        console.log('RECOMMEND API:', res);
 
       // QUAN TRỌNG
-      this.recommendedProjects = res.recommended_projects ?? [];
-      this.riskTier = res.risk_tier;
-      
+        this.recommendedProjects = res.recommended_projects ?? [];
+        this.riskTier = res.risk_tier;
+      },
+      error: (error) => {
+        console.error('RECOMMEND API ERROR:', error);
+        this.recommendedProjects = [];
+        this.recommendationError = 'Không thể tải gợi ý lúc này. Vui lòng thử lại sau.';
+        this.isLoadingRecommendations = false;
+      },
+      complete: () => {
+        this.isLoadingRecommendations = false;
+      }
     });
   }
 

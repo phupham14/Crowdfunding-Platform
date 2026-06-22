@@ -1,0 +1,161 @@
+<div class="review-page">
+  <div class="page-header">
+    <div>
+      <h2>Duyệt đơn Project Owner</h2>
+      <p>Quản lý các yêu cầu nâng cấp từ investor lên project owner.</p>
+    </div>
+
+    <button class="refresh-btn" (click)="loadApplications()" [disabled]="loading">
+      {{ loading ? 'Đang tải...' : 'Tải lại' }}
+    </button>
+  </div>
+
+  <div class="toolbar">
+    <select [(ngModel)]="selectedStatus" (change)="applyFilter()">
+      <option value="">Tất cả trạng thái</option>
+      <option value="PENDING">Pending</option>
+      <option value="APPROVED">Approved</option>
+      <option value="REJECTED">Rejected</option>
+    </select>
+  </div>
+
+  <div *ngIf="successMessage" class="message success">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="message error">{{ errorMessage }}</div>
+
+  <div *ngIf="loading" class="loading-card">Đang tải dữ liệu...</div>
+
+  <div *ngIf="!loading && filteredApplications.length === 0" class="empty-state">
+    Chưa có đơn đăng ký nào.
+  </div>
+
+  <div *ngIf="!loading && filteredApplications.length" class="review-layout">
+    <div class="table-card">
+      <table class="application-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Ứng viên</th>
+            <th>Doanh nghiệp</th>
+            <th>Trạng thái</th>
+            <th>Ngày gửi</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let application of filteredApplications">
+            <td>#{{ application.id }}</td>
+            <td>
+              <div class="cell-main">{{ application.user_full_name || 'N/A' }}</div>
+              <div class="cell-sub">{{ application.user_email || 'N/A' }}</div>
+            </td>
+            <td>{{ application.business_name }}</td>
+            <td>
+              <span class="status-badge" [ngClass]="getStatusClass(application.status)">
+                {{ application.status }}
+              </span>
+            </td>
+            <td>{{ application.created_at | date:'short' }}</td>
+            <td>
+              <button class="ghost-btn" (click)="openDetail(application)">Xem</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="detail-card" *ngIf="selectedApplication; else emptyDetail">
+      <div class="detail-header">
+        <div>
+          <h3>{{ selectedApplication.business_name }}</h3>
+          <p>{{ selectedApplication.user_full_name }} - {{ selectedApplication.user_email }}</p>
+        </div>
+
+        <span class="status-badge" [ngClass]="getStatusClass(selectedApplication.status)">
+          {{ selectedApplication.status }}
+        </span>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-item">
+          <span class="label">Loại hình</span>
+          <strong>{{ selectedApplication.business_type || 'Chưa cập nhật' }}</strong>
+        </div>
+
+        <div class="detail-item">
+          <span class="label">Mã số thuế</span>
+          <strong>{{ selectedApplication.tax_code || 'Chưa cập nhật' }}</strong>
+        </div>
+
+        <div class="detail-item">
+          <span class="label">CCCD / giấy phép</span>
+          <strong>{{ selectedApplication.id_number || 'Chưa cập nhật' }}</strong>
+        </div>
+
+        <div class="detail-item">
+          <span class="label">Reviewer</span>
+          <strong>{{ selectedApplication.reviewer_email || 'Chưa duyệt' }}</strong>
+        </div>
+      </div>
+
+      <div class="panel-block">
+        <span class="label">Giới thiệu</span>
+        <p>{{ selectedApplication.bio || 'Không có mô tả' }}</p>
+      </div>
+
+      <div class="panel-block">
+        <span class="label">Kinh nghiệm</span>
+        <p>{{ selectedApplication.experience || 'Không có thông tin' }}</p>
+      </div>
+
+      <div class="panel-block">
+        <span class="label">Tài liệu</span>
+        <a
+          *ngIf="selectedApplication.document_url; else noDocument"
+          [href]="selectedApplication.document_url"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Mở tài liệu
+        </a>
+        <ng-template #noDocument>Không có link tài liệu</ng-template>
+      </div>
+
+      <div class="panel-block" *ngIf="selectedApplication.status !== 'APPROVED'">
+        <label class="label" for="reject_reason">Lý do reject</label>
+        <textarea
+          id="reject_reason"
+          [(ngModel)]="rejectReason"
+          placeholder="Nhập lý do nếu bạn muốn từ chối đơn này"
+        ></textarea>
+      </div>
+
+      <div class="detail-actions">
+        <button class="ghost-btn" (click)="closeDetail()">Đóng</button>
+
+        <button
+          class="reject-btn"
+          *ngIf="selectedApplication.status !== 'APPROVED'"
+          [disabled]="actionLoadingId === selectedApplication.id"
+          (click)="reject(selectedApplication)"
+        >
+          Reject
+        </button>
+
+        <button
+          class="approve-btn"
+          *ngIf="selectedApplication.status !== 'APPROVED'"
+          [disabled]="actionLoadingId === selectedApplication.id"
+          (click)="approve(selectedApplication)"
+        >
+          Approve
+        </button>
+      </div>
+    </div>
+
+    <ng-template #emptyDetail>
+      <div class="detail-placeholder">
+        Chọn một đơn đăng ký để xem thông tin chi tiết.
+      </div>
+    </ng-template>
+  </div>
+</div>

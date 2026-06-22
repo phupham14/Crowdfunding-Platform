@@ -2,6 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ChartData, ChartOptions } from 'chart.js';
 import { ReportService } from 'src/app/core/services/report.service';
 
+interface RevenueTimelinePoint {
+  label: string;
+  invested?: number;
+  profit?: number;
+  revenue?: number;
+}
+
 @Component({
   selector: 'app-revenue-report',
   templateUrl: './revenue-report.component.html',
@@ -9,31 +16,80 @@ import { ReportService } from 'src/app/core/services/report.service';
 })
 export class RevenueReportComponent implements OnInit {
 
-  // Summary
-  totalInvested: number = 0;        // thêm biến này
-  estimatedProfit = 120000000;
-  profitRate = 18.5;
+  totalInvested = 0;
+  estimatedProfit = 0;
+  profitRate = 0;
+  loading = false;
+  error: string | null = null;
 
-  // Doughnut chart (profit rate)
   profitRateData!: ChartData<'doughnut'>;
-  profitRateOptions: ChartOptions = {
+  valueComparisonData!: ChartData<'bar'>;
+  revenueTrendData: ChartData<'line'> | null = null;
+
+  profitRateOptions: ChartOptions<'doughnut'> = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: 'bottom'
+      },
+      tooltip: {
+        callbacks: {
+          label: (context) => `${context.label}: ${context.parsed}%`
+        }
+      }
+    },
+    cutout: '62%'
+  };
+
+  valueComparisonOptions: ChartOptions<'bar'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false
+      },
+      tooltip: {
+        callbacks: {
+          label: (context) => this.formatCurrency(context.parsed.y ?? 0)
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          callback: (value) => this.formatCompactCurrency(Number(value))
+        }
       }
     }
   };
 
-  // Bar chart (estimated profit)
-  profitBarData!: ChartData<'bar'>;
-
-  // Line chart (profit over time)
-  profitLineData!: ChartData<'line'>;          // thêm khai báo
-  profitLineOptions: ChartOptions = {          // thêm khai báo
+  revenueTrendOptions: ChartOptions<'line'> = {
     responsive: true,
-    plugins: { legend: { position: 'bottom' } },
-    scales: { y: { beginAtZero: true } }
+    maintainAspectRatio: false,
+    interaction: {
+      mode: 'index',
+      intersect: false
+    },
+    plugins: {
+      legend: {
+        position: 'bottom'
+      },
+      tooltip: {
+        callbacks: {
+          label: (context) => `${context.dataset.label}: ${this.formatCurrency(context.parsed.y ?? 0)}`
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          callback: (value) => this.formatCompactCurrency(Number(value))
+        }
+      }
+    }
   };
 
   constructor(private reportService: ReportService) {}
@@ -43,40 +99,112 @@ export class RevenueReportComponent implements OnInit {
   }
 
   private loadRevenueReport(): void {
+    this.loading = true;
+    this.error = null;
+
     this.reportService.getRevenueReport().subscribe({
       next: (res: any) => {
-        this.estimatedProfit = res.estimated_profit;
-        this.profitRate = res.profit_rate;
+        this.totalInvested = this.toNumber(res.total_invested);
+        this.estimatedProfit = this.toNumber(res.estimated_profit);
+        this.profitRate = this.toNumber(res.profit_rate);
 
-        this.initCharts();
+        this.initCharts(res);
+        this.loading = false;
       },
-      error: (err) => {
-        console.error('Load revenue report failed', err);
+      error: () => {
+        this.error = 'Không thể tải báo cáo doanh thu';
+        this.loading = false;
       }
     });
   }
 
-  private initCharts(): void {
+  private initCharts(res: any): void {
+    const safeProfitRate = Math.max(0, this.profitRate);
+    const remainingRate = Math.max(0, 100 - safeProfitRate);
+
     this.profitRateData = {
-      labels: ['Profit', 'Remaining'],
+      labels: ['Profit rate', 'Remaining to 100%'],
       datasets: [
         {
-          data: [
-            this.profitRate,
-            Math.max(0, 100 - this.profitRate)
-          ]
+          data: [safeProfitRate, remainingRate],
+          backgroundColor: ['#16a34a', '#e5e7eb'],
+          borderColor: '#ffffff',
+          borderWidth: 3
         }
       ]
     };
 
-    this.profitBarData = {
-      labels: ['Estimated Profit'],
+    const valueLabels = this.totalInvested > 0
+      ? ['Total invested', 'Estimated profit']
+      : ['Estimated profit'];
+    const valueData = this.totalInvested > 0
+      ? [this.totalInvested, this.estimatedProfit]
+      : [this.estimatedProfit];
+
+    this.valueComparisonData = {
+      labels: valueLabels,
       datasets: [
         {
-          label: 'VNĐ',
-          data: [this.estimatedProfit]
+          label: 'VND',
+          data: valueData,
+          backgroundColor: this.totalInvested > 0 ? ['#2563eb', '#16a34a'] : ['#16a34a'],
+          borderRadius: 8,
+          maxBarThickness: 72
         }
       ]
     };
+
+    this.revenueTrendData = this.buildTrendData(res.revenue_timeline || res.timeline || res.monthly_revenue);
+  }
+
+  private buildTrendData(points: RevenueTimelinePoint[] | undefined): ChartData<'line'> | null {
+    if (!Array.isArray(points) || points.length === 0) {
+      return null;
+    }
+
+    const labels = points.map((point) => point.label);
+    const investedData = points.map((point) => this.toNumber(point.invested));
+    const profitData = points.map((point) => this.toNumber(point.profit ?? point.revenue));
+
+    return {
+      labels,
+      datasets: [
+        {
+          label: 'Invested',
+          data: investedData,
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37, 99, 235, 0.12)',
+          tension: 0.35,
+          fill: false
+        },
+        {
+          label: 'Profit',
+          data: profitData,
+          borderColor: '#16a34a',
+          backgroundColor: 'rgba(22, 163, 74, 0.12)',
+          tension: 0.35,
+          fill: false
+        }
+      ]
+    };
+  }
+
+  private toNumber(value: unknown): number {
+    return Number(value) || 0;
+  }
+
+  private formatCurrency(value: number): string {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+      maximumFractionDigits: 0
+    }).format(value);
+  }
+
+  private formatCompactCurrency(value: number): string {
+    return new Intl.NumberFormat('vi-VN', {
+      notation: 'compact',
+      maximumFractionDigits: 1
+    }).format(value);
   }
 }

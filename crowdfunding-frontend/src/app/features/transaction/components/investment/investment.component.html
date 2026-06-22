@@ -1,29 +1,53 @@
 <div class="investment-overlay">
   <div class="investment-modal">
-    <h2>Invest in {{ project.name }}</h2>
+    <h2>Đầu tư vào {{ project.name }}</h2>
 
     <p class="project-goal">
-      Raised: {{ project.raised | currency:'VND' }} /
-      Goal: {{ project.funding_target | currency:'VND' }}
+      Đã huy động: {{ project.raised | currency:'VND' }} /
+      Mục tiêu: {{ project.funding_target | currency:'VND' }}
     </p>
 
-    <div class="wallet-message error" *ngIf="errorMessage">{{ errorMessage }}</div>
-    <div class="wallet-message success" *ngIf="successMessage">{{ successMessage }}</div>
+    <!-- Messages -->
+    <div class="wallet-message error" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+    <div class="wallet-message success" *ngIf="successMessage">
+      {{ successMessage }}
+    </div>
 
+    <!-- Amount -->
     <div class="input-group">
-      <label for="amount">Amount to Invest</label>
+      <label for="amount">Số tiền đầu tư</label>
       <input
         type="number"
         id="amount"
         [(ngModel)]="amount"
         min="1"
         placeholder="Enter amount"
+        [disabled]="isProcessing"
       />
     </div>
 
+    <!-- 🔥 Stripe Card Element -->
+    <div class="input-group">
+      <label>Thông tin thẻ</label>
+      <div id="card-element" class="card-element"></div>
+      <div id="card-errors" class="card-errors"></div>
+    </div>
+
+    <!-- Actions -->
     <div class="modal-actions">
-      <button class="confirm" (click)="confirmInvestment()">Confirm</button>
-      <button class="cancel" (click)="close.emit()">Cancel</button>
+      <button
+        class="confirm"
+        [disabled]="isProcessing"
+        (click)="confirmInvestment()"
+      >
+        {{ isProcessing ? 'Đang xử lý...' : 'Xác nhận' }}
+      </button>
+
+      <button class="cancel" [disabled]="isProcessing" (click)="close.emit()">
+        Hủy
+      </button>
     </div>
   </div>
 </div>

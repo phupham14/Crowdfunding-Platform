@@ -1,6 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Wallet } from 'src/app/core/models/wallet.model';
 import { TransactionService } from 'src/app/core/services/transaction.service';
+import { firstValueFrom } from 'rxjs';
+import {
+  loadStripe,
+  Stripe,
+  StripeElements,
+  StripeCardElement,
+} from '@stripe/stripe-js';
 
 @Component({
   selector: 'app-wallet',
@@ -12,16 +19,48 @@ export class WalletComponent implements OnInit {
 
   errorMessage = '';
   successMessage = '';
+  isProcessing = false;
 
   amountFundIn = 0;
-  fundInDescription = '';
 
-  amountWithdraw = 0;
-  withdrawDescription = '';
+  stripe!: Stripe | null;
+  elements!: StripeElements;
+  card!: StripeCardElement;
 
   constructor(private transactionService: TransactionService) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    // 🔥 PHẢI load Stripe trước
+    this.stripe = await loadStripe(
+      'pk_test_51TOKD0A6SZXlcVLm55VvRcOZHso9BmuwB3Ayp4ZKFK0rIh4Pbn48GomuyOG3UmBT9ECAUeAApJZW2mGg7bRtVdcN00OKhDa2ET',
+    );
+
+    if (!this.stripe) {
+      this.errorMessage = 'Stripe failed to load';
+      return;
+    }
+
+    this.elements = this.stripe.elements();
+
+    this.card = this.elements.create('card', {
+      style: {
+        base: {
+          fontSize: '16px',
+        },
+      },
+    });
+
+    this.card.mount('#card-element');
+
+    this.card.on('change', (event) => {
+      const displayError = document.getElementById('card-errors');
+      if (event.error) {
+        displayError!.textContent = event.error.message;
+      } else {
+        displayError!.textContent = '';
+      }
+    });
+
     this.loadWallet();
   }
 
@@ -31,7 +70,7 @@ export class WalletComponent implements OnInit {
       .subscribe((wallet) => (this.wallet = wallet));
   }
 
-  fundIn() {
+  async fundIn() {
     this.errorMessage = '';
     this.successMessage = '';
 
@@ -40,57 +79,62 @@ export class WalletComponent implements OnInit {
       return;
     }
 
-    this.transactionService
-      .fundIn({
-        amount: this.amountFundIn,
-        description: this.fundInDescription,
-        type: 'FUND_IN',
-      })
-      .subscribe({
-        next: () => {
-          this.amountFundIn = 0;
-          this.fundInDescription = '';
-          setTimeout(() => { 
-            this.successMessage = 'Fund in successful'; 
-          }, 3000);
-          console.log('Fund in successful');
-          this.loadWallet();
-        },
-        error: (err) => {
-          this.errorMessage = err.error?.message || 'Fund in failed';
-        },
-      });
-  }
+    // ✅ bắt đầu processing
+    this.isProcessing = true;
 
-  withdraw() {
-    this.errorMessage = '';
-    this.successMessage = '';
+    try {
+      const res = await firstValueFrom(
+        this.transactionService.fundIn({
+          amount: this.amountFundIn,
+          type: 'FUND_IN',
+        }),
+      );
 
-    if (this.amountWithdraw <= 0) {
-      this.errorMessage = 'Amount must be greater than 0';
-      return;
+      console.log('FUND IN RESPONSE:', res);
+
+      const clientSecret = res.clientSecret;
+
+      const { error, paymentIntent } = await this.stripe!.confirmCardPayment(
+        clientSecret,
+        {
+          payment_method: {
+            card: this.card,
+          },
+        },
+      );
+
+      console.log('paymentIntent:', paymentIntent);
+
+      if (error) {
+        console.error('Stripe error:', error);
+
+        this.errorMessage = error.message || 'Payment failed';
+
+        // ✅ mở lại button
+        this.isProcessing = false;
+
+        return;
+      }
+
+      if (paymentIntent?.status === 'succeeded') {
+        this.successMessage = 'Payment submitted, waiting confirmation...';
+
+        await firstValueFrom(
+          this.transactionService.confirmPayment(paymentIntent.id)
+        );
+
+        this.loadWallet();
+        this.successMessage = 'Fund in successful';
+        this.isProcessing = false;
+      }
+    } catch (err: any) {
+      console.error(err);
+
+      this.errorMessage = err.error?.message || 'Fund in failed';
+
+      // ✅ mở lại button
+      this.isProcessing = false;
     }
-
-    this.transactionService
-      .withdraw({
-        amount: this.amountWithdraw,
-        description: this.withdrawDescription,
-        type: 'WITHDRAW',
-      })
-      .subscribe({
-        next: () => {
-          this.amountWithdraw = 0;
-          this.withdrawDescription = '';
-          setTimeout(() => { 
-            this.successMessage = 'Withdraw successful'; 
-          }, 3000);
-          console.log('Withdraw successful');
-          this.loadWallet();
-        },
-        error: (err) => {
-          this.errorMessage = err.error?.message || 'Withdraw failed';
-        },
-      });
   }
 
   onInvestSuccess() {

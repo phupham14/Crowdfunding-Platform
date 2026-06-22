@@ -1,6 +1,4 @@
-<div class="project-detail" *ngIf="project">
-
-  <!-- Header -->
+<div class="project-detail" *ngIf="project && !isLoading">
   <div class="card header">
     <div class="title-row">
       <h2>{{ project.name }}</h2>
@@ -13,11 +11,10 @@
     <p class="description">{{ project.description }}</p>
   </div>
 
-  <!-- Stats -->
   <div class="card stats">
     <ul>
       <li>
-        <span>Funding Target</span>
+        <span>Funding target</span>
         <strong>{{ project.funding_target | currency:'VND' }}</strong>
       </li>
       <li>
@@ -25,80 +22,119 @@
         <strong>{{ project.raised | currency:'VND' }}</strong>
       </li>
       <li>
-        <span>Investors</span>
-        <strong>{{ project.investor_count }}</strong>
+        <span>Total repaid</span>
+        <strong>{{ project.total_repaid | currency:'VND' }}</strong>
+      </li>
+      <li>
+        <span>Remaining repayment</span>
+        <strong>{{ getRemainingRepayment() | currency:'VND' }}</strong>
+      </li>
+      <li>
+        <span>Disbursement</span>
+        <strong>{{ project.is_disbursed ? 'Done' : 'Pending' }}</strong>
+      </li>
+      <li>
+        <span>Investor count</span>
+        <strong>{{ project.investor_count || 0 }}</strong>
       </li>
     </ul>
 
-    <!-- Progress bar -->
     <div class="progress">
       <div class="progress-bar" [style.width.%]="(project.raised / project.funding_target) * 100">
       </div>
     </div>
   </div>
 
-  <!-- Chart -->
   <div class="card chart-container">
     <canvas baseChart [data]="fundingChartData" [options]="fundingChartOptions" chartType="doughnut">
     </canvas>
   </div>
 
-  <!-- Investment Info -->
   <div class="card info">
-    <h3>Investment Info</h3>
+    <h3>Investment info</h3>
 
     <ul class="info-list">
       <li>
-        <span>Min Investment</span>
-        <strong>{{ project.min_invest_amount | currency:'VND' }}</strong>
+        <span>Minimum investment</span>
+        <strong>{{ project.min_invest_amount || 0 | currency:'VND' }}</strong>
       </li>
 
       <li *ngIf="project.max_invest_amount">
-        <span>Max Investment</span>
+        <span>Maximum investment</span>
         <strong>{{ project.max_invest_amount | currency:'VND' }}</strong>
       </li>
     </ul>
   </div>
 
-  <!-- Timeline -->
   <div class="card timeline">
-    <h3>Funding Timeline</h3>
+    <h3>Funding timeline</h3>
 
     <div class="timeline-row">
       <div>
-        <span>Start Date</span>
-        <strong>{{ project.start_at | date:'dd/MM/yyyy' }}</strong>
+        <span>Start date</span>
+        <strong>{{ (project.start_at || project.start_date) | date:'dd/MM/yyyy' }}</strong>
       </div>
 
       <div>
-        <span>End Date</span>
-        <strong>{{ project.end_at | date:'dd/MM/yyyy' }}</strong>
+        <span>End date</span>
+        <strong>{{ (project.end_at || project.end_date) | date:'dd/MM/yyyy' }}</strong>
       </div>
     </div>
   </div>
 
-
-  <!-- Actions -->
   <div class="card actions">
+    <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
     <div class="action-buttons">
       <button class="secondary" (click)="goToEdit()">
-        Update Project
+        Cập nhật thông tin
       </button>
 
-      <button *ngIf="project.status === 'OPEN'" class="danger" (click)="changeProjectStatus('CLOSED')">
-        Close Project
+      <button
+        *ngIf="project.status === 'OPEN'"
+        class="danger"
+        (click)="changeProjectStatus('CANCELLED')">
+        Hủy dự án
       </button>
 
-      <button *ngIf="project.status === 'CLOSED'" class="success" (click)="changeProjectStatus('OPEN')">
-        Reopen Project
+      <button
+        *ngIf="project.status === 'CANCELLED'"
+        class="success"
+        (click)="changeProjectStatus('OPEN')">
+        Mở lại dự án
       </button>
 
-      <!-- Delete Button -->
+      <button
+        *ngIf="canDisburse()"
+        class="success"
+        [disabled]="isDisbursing"
+        (click)="disburseProject()">
+        {{ isDisbursing ? 'Đang giải ngân...' : 'Giải ngân cho chủ dự án' }}
+      </button>
+
       <button class="danger-outline" (click)="deleteProject()" title="Xóa dự án">
-        Delete Project
+        Xóa dự án
       </button>
     </div>
 
-  </div>
+    <div class="repayment-form" *ngIf="canRepay()">
+      <h3>Repayment</h3>
+      <p>Nhập số tiền bạn muốn hoàn vốn cho nhà đầu tư.</p>
 
+      <input
+        type="number"
+        min="0"
+        step="0.01"
+        [(ngModel)]="repaymentAmount"
+        placeholder="Số tiền hoàn vốn" />
+
+      <button
+        class="success"
+        [disabled]="isRepaying || !repaymentAmount || repaymentAmount <= 0"
+        (click)="repayProject()">
+        {{ isRepaying ? 'Đang xử lý...' : 'Hoàn vốn' }}
+      </button>
+    </div>
+  </div>
 </div>

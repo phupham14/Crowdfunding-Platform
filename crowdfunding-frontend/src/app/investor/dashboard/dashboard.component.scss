@@ -133,7 +133,78 @@
   }
 }
 
+.recommend-loading {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.recommend-fallback {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  color: #6b7280;
+  margin: 0;
+  padding: 1rem;
+}
+
+.skeleton-card {
+  cursor: default;
+
+  &:hover {
+    transform: none;
+  }
+}
+
+.skeleton {
+  animation: skeleton-pulse 1.2s ease-in-out infinite;
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 37%, #f3f4f6 63%);
+  background-size: 400% 100%;
+  border-radius: 0.5rem;
+}
+
+.skeleton-image {
+  border-radius: 0;
+  height: 140px;
+  width: 100%;
+}
+
+.skeleton-title {
+  height: 20px;
+  margin-bottom: 0.75rem;
+  width: 70%;
+}
+
+.skeleton-line {
+  height: 14px;
+  margin-bottom: 0.5rem;
+  width: 100%;
+
+  &.short {
+    width: 55%;
+  }
+}
+
+@keyframes skeleton-pulse {
+  0% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0 50%;
+  }
+}
+
 .recommend-card {
+  position: relative;
   background: white;
   border-radius: 0.75rem;
   overflow: hidden;
@@ -171,4 +242,63 @@
       font-weight: 600;
     }
   }
+}
+
+.summary-tag {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 1;
+  max-width: calc(100% - 1.5rem);
+  min-height: 2rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 0.5rem;
+  background: rgba(17, 24, 39, 0.82);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.35;
+  outline: none;
+  overflow: visible;
+  text-align: left;
+
+  &:hover,
+  &:focus-visible {
+    z-index: 3;
+
+    .summary-tag__text {
+      opacity: 1;
+      transform: translateY(0);
+      visibility: visible;
+    }
+  }
+}
+
+.summary-tag__label {
+  white-space: nowrap;
+}
+
+.summary-tag__text {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  width: min(18rem, calc(100vw - 3rem));
+  max-height: 9rem;
+  padding: 0.7rem 0.8rem;
+  border-radius: 0.5rem;
+  background: rgba(17, 24, 39, 0.96);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.45;
+  opacity: 0;
+  overflow-y: auto;
+  transform: translateY(-0.25rem);
+  transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s ease;
+  visibility: hidden;
 }

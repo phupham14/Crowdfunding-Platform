@@ -4,19 +4,19 @@ services:
   db:
     image: postgres:15
     container_name: postgres_db
+    profiles:
+      - docker-db
     restart: always
-    env_file:
-      - .env
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: crowdfunding
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin1405
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d crowdfunding"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -26,16 +26,31 @@ services:
       context: ./Backend/crowdfunding_project
       dockerfile: Dockerfile
     container_name: django_backend
-    command: sh -c "./wait-for-db.sh db python manage.py migrate && python manage.py runserver 0.0.0.0:8080"
+    command: sh -c "./wait-for-db.sh python manage.py migrate && python manage.py runserver 0.0.0.0:8080"
     volumes:
       - ./Backend/crowdfunding_project:/app
     ports:
       - "8080:8080"
     env_file:
-      - .env
+      - ./Backend/crowdfunding_project/.env
+    environment:
+      DB_HOST: host.docker.internal
+      DB_PORT: 5432
+      DB_NAME: crowdfunding
+      DB_USER: postgres
+      DB_PASSWORD: admin1405
+  stripe-cli:
+    image: stripe/stripe-cli
+    container_name: stripe_cli
+    entrypoint: ["sh", "-c"]
+    command:
+      - "stripe listen --api-key $$STRIPE_SECRET_KEY --forward-to http://backend:8080/api/transactions/webhook/"
+    env_file:
+      - ./Backend/crowdfunding_project/.env
+    volumes:
+      - stripe_cli_config:/root/.config/stripe/
     depends_on:
-      db:
-        condition: service_healthy
+      - backend
 
   frontend:
     build:
@@ -44,12 +59,14 @@ services:
     container_name: angular_frontend
     volumes:
       - ./crowdfunding-frontend:/app
+      - /app/node_modules
     ports:
       - "4200:4200"
     environment:
-      - API_URL=http://django_backend:8080
+      API_URL: http://localhost:8080
     depends_on:
       - backend
 
 volumes:
   postgres_data:
+  stripe_cli_config:

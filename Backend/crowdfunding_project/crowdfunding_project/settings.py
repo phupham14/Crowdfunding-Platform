@@ -27,6 +27,25 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
 
+# Stripe keys
+STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY")
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
+STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
+
+# Recommendation explanations
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+GOOGLE_AI_MODEL = os.getenv("GOOGLE_AI_MODEL", "gemini-2.5-flash")
+RECOMMENDATION_EXPLANATIONS_USE_LLM = os.getenv(
+    "RECOMMENDATION_EXPLANATIONS_USE_LLM",
+    "True",
+) == "True"
+RECOMMENDATION_EXPLANATIONS_USE_SHAP = os.getenv(
+    "RECOMMENDATION_EXPLANATIONS_USE_SHAP",
+    "False",
+) == "True"
+RECOMMENDATION_SHAP_BACKGROUND_SIZE = int(os.getenv("RECOMMENDATION_SHAP_BACKGROUND_SIZE", "20"))
+RECOMMENDATION_SHAP_NSAMPLES = int(os.getenv("RECOMMENDATION_SHAP_NSAMPLES", "50"))
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG") == "True"
 
@@ -180,4 +199,3 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-

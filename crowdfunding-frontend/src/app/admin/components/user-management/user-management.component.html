@@ -1,14 +1,14 @@
-<h2>User Management</h2>
+<h2>Quản lý người dùng</h2>
 
 <div class="filters">
   <select [(ngModel)]="filterLocked" (change)="onFilterChange()">
-    <option value="">All Users</option>
+    <option value="">Tất cả trạng thái</option>
     <option value="false">Active</option>
     <option value="true">Locked</option>
   </select>
 
   <select [(ngModel)]="filterRole" (change)="onFilterChange()">
-    <option value="">All Roles</option>
+    <option value="">Tất cả vai trò</option>
     <option value="ADMIN">Admin</option>
     <option value="PROJECT_OWNER">Project Owner</option>
     <option value="INVESTOR">Investor</option>
@@ -22,11 +22,11 @@
   <thead>
     <tr>
       <th>ID</th>
-      <th>Name</th>
+      <th>Tên người dùng</th>
       <th>Email</th>
-      <th>Role</th>
-      <th>Status</th>
-      <th>Actions</th>
+      <th>Vai trò</th>
+      <th>Trạng thái</th>
+      <th>Hành động</th>
     </tr>
   </thead>
   <tbody>
@@ -72,11 +72,11 @@
 <!-- User Detail Modal -->
 <div class="modal-backdrop" *ngIf="selectedUser">
   <div class="modal">
-    <h3>User Detail</h3>
+    <h3>Chi tiết người dùng</h3>
     <p><b>ID:</b> {{ selectedUser.id }}</p>
-    <p><b>Name:</b> {{ selectedUser.full_name }}</p>
+    <p><b>Tên người dùng:</b> {{ selectedUser.full_name }}</p>
     <p><b>Email:</b> {{ selectedUser.email }}</p>
-    <p><b>Status:</b> {{ selectedUser.locked ? 'Locked' : 'Active' }}</p>
+    <p><b>Trạng thái:</b> {{ selectedUser.locked ? 'Locked' : 'Active' }}</p>
 
     <button (click)="closeDetail()">Close</button>
   </div>

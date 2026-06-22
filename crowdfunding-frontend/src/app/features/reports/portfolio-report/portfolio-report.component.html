@@ -1,17 +1,17 @@
-<h2>Portfolio Report</h2>
+<h2>Báo cáo danh mục đầu tư</h2>
 
 <div class="summary">
   <div class="card">
-    <h3>Total Invested</h3>
+    <h3>Tổng số tiền đầu tư</h3>
     <p>{{ totalInvested | currency:'VND' }}</p>
   </div>
   <div class="card">
-    <h3>Investment Count</h3>
+    <h3>Số lượng đầu tư</h3>
     <p>{{ investmentCount }}</p>
   </div>
 </div>
 
-<h3>Investment Allocation</h3>
+<h3>Phân bổ đầu tư</h3>
 <div style="max-width: 400px; margin-bottom: 2rem;">
   <canvas baseChart
           [data]="allocationData"
@@ -20,14 +20,14 @@
   </canvas>
 </div>
 
-<h3>Investment List</h3>
+<h3>Danh sách đầu tư</h3>
 <table>
   <thead>
     <tr>
-      <th>Project</th>
-      <th>Name</th>
-      <th>Amount</th>
-      <th>Date</th>
+      <th>Dự án</th>
+      <th>Tên</th>
+      <th>Số tiền</th>
+      <th>Ngày</th>
     </tr>
   </thead>
   <tbody>

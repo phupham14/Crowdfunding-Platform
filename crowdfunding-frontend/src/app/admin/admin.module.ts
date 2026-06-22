@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AdminRoutingModule } from './admin-routing.module';
 import { AdminDashboardComponent } from './components/dashboard/dashboard.component';
+import { ProjectOwnerApplicationReviewComponent } from './components/project-owner-application-review/project-owner-application-review.component';
 import { UserManagementComponent } from './components/user-management/user-management.component';
 import { ProjectModerationComponent } from './components/project-moderation/project-moderation.component';
 import { TransactionMonitoringComponent } from './components/transaction-monitoring/transaction-monitoring.component';
@@ -15,6 +16,7 @@ import { FormsModule } from '@angular/forms';
   declarations: [
     AdminDashboardComponent,
     UserManagementComponent,
+    ProjectOwnerApplicationReviewComponent,
     ProjectModerationComponent,
     TransactionMonitoringComponent,
     SystemReportsComponent

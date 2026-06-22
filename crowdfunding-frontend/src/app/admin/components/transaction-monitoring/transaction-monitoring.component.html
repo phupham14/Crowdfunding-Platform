@@ -1,17 +1,17 @@
-<h2>Transaction Monitoring</h2>
+<h2>Theo dõi giao dịch</h2>
 
 <div class="filters">
   <select [(ngModel)]="filterStatus" (change)="onFilterChange()">
-    <option value="">All Status</option>
+    <option value="">Tất cả trạng thái</option>
     <option value="SUCCESS">Success</option>
     <option value="FAILED">Failed</option>
   </select>
 
   <select [(ngModel)]="filterType" (change)="onFilterChange()">
-    <option value="">All Types</option>
-    <option value="FUND_IN">Fund In</option>
-    <option value="INVEST">Invest</option>
-    <option value="WITHDRAW">Withdraw</option>
+    <option value="">Tất cả loại giao dịch</option>
+    <option value="FUND_IN">Nạp tiền</option>
+    <option value="INVEST">Đầu tư</option>
+    <option value="WITHDRAW">Rút tiền</option>
   </select>
 </div>
 
@@ -22,11 +22,11 @@
   <thead>
     <tr>
       <th>ID</th>
-      <th>User</th>
-      <th>Type</th>
-      <th>Amount</th>
-      <th>Status</th>
-      <th>Created At</th>
+      <th>UserID</th>
+      <th>Loại</th>
+      <th>Số tiền</th>
+      <th>Trạng thái</th>
+      <th>Ngày tạo</th>
     </tr>
   </thead>
   <tbody>

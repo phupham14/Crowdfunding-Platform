@@ -1,0 +1,120 @@
+<div class="apply-page">
+  <div class="apply-shell">
+    <aside class="apply-sidebar">
+      <h2>Đăng ký chủ dự án</h2>
+      <p>
+        Hoàn thành mẫu đơn dưới đây để đăng ký trở thành chủ dự án trên nền tảng của chúng tôi. 
+        Chúng tôi sẽ xem xét đơn đăng ký của bạn và liên hệ lại trong vòng 5-7 ngày làm việc. 
+        Vui lòng đảm bảo cung cấp thông tin chính xác và đầy đủ để tăng cơ hội được chấp thuận. 
+        Cảm ơn bạn đã quan tâm đến việc trở thành một phần của cộng đồng sáng tạo của chúng tôi!
+      </p>
+
+      <div
+        *ngIf="currentStatus"
+        class="status-chip"
+        [ngClass]="getStatusClass()"
+      >
+        Trạng thái: {{ currentStatus }}
+      </div>
+
+      <div class="sidebar-notes">
+        <h3>Lưu ý</h3>
+        <ul>
+          <li>Nếu đơn bị từ chối, bạn có thể cập nhật và gửi lại.</li>
+          <li>Link tài liệu nên là file drive, pdf, hoặc landing page doanh nghiệp.</li>
+          <li>Sau khi duyệt, tài khoản sẽ được cấp quyền project owner.</li>
+        </ul>
+      </div>
+    </aside>
+
+    <section class="apply-form-card">
+      <p class="message success" *ngIf="successMessage">{{ successMessage }}</p>
+      <p class="message error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <form class="apply-form" [formGroup]="form" (ngSubmit)="submit()">
+        <div class="field-grid">
+          <div class="field">
+            <label for="business_name">Tên doanh nghiệp / dự án</label>
+            <input
+              id="business_name"
+              type="text"
+              formControlName="business_name"
+              placeholder="VD: Green Farm Tech"
+            />
+            <span
+              class="error-text"
+              *ngIf="form.get('business_name')?.touched && form.get('business_name')?.invalid"
+            >
+              Trường này là bắt buộc.
+            </span>
+          </div>
+
+          <div class="field">
+            <label for="business_type">Loại hình</label>
+            <input
+              id="business_type"
+              type="text"
+              formControlName="business_type"
+              placeholder="VD: Công nghệ / ông nghiệp / F&B"
+            />
+          </div>
+
+          <div class="field">
+            <label for="tax_code">Mã số thuế</label>
+            <input
+              id="tax_code"
+              type="text"
+              formControlName="tax_code"
+              placeholder="Nhập mã số thuế của doanh nghiệp"
+            />
+          </div>
+
+          <div class="field">
+            <label for="id_number">CCCD / Giấy phép</label>
+            <input
+              id="id_number"
+              type="text"
+              formControlName="id_number"
+              placeholder="Nhập số giấy tờ xác minh"
+            />
+          </div>
+
+          <div class="field full">
+            <label for="bio">Giới thiệu</label>
+            <textarea
+              id="bio"
+              formControlName="bio"
+              placeholder="Mô tả ngắn gọn về doanh nghiệp, định hướng và lĩnh vực hoạt động"
+            ></textarea>
+          </div>
+
+          <div class="field full">
+            <label for="experience">Kinh nghiệm</label>
+            <textarea
+              id="experience"
+              formControlName="experience"
+              placeholder="Tóm tắt kinh nghiệm quản lý, vận hành, gọi vốn hoặc các dự án đã thực hiện"
+            ></textarea>
+          </div>
+
+          <div class="field full">
+            <label for="document_url">Link tài liệu</label>
+            <input
+              id="document_url"
+              type="text"
+              formControlName="document_url"
+              placeholder="https://..."
+            />
+            <span class="hint">Bạn có thể dán link Google Drive, PDF hoặc website doanh nghiệp.</span>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" [disabled]="loading">
+            {{ loading ? 'Đang gửi...' : 'Gửi đăng ký' }}
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
+</div>

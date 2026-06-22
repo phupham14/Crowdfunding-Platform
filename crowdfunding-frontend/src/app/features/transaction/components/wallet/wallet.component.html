@@ -1,40 +1,31 @@
 <div class="wallet-container">
 
-  <h1>My Wallet</h1>
+  <h1>💰 Ví của tôi</h1>
   <!-- BALANCE CARD -->
   <div class="balance-card" *ngIf="wallet">
-    <p class="label">Wallet Balance</p>
+    <p class="label">Số dư ví</p>
     <h2>{{ wallet.balance | currency:'VND' }}</h2>
   </div>
 
   <p class="wallet-message error" *ngIf="errorMessage">{{ errorMessage }}</p>
   <p class="wallet-message success" *ngIf="successMessage">{{ successMessage }}</p>
 
-
   <!-- ACTIONS -->
   <div class="wallet-actions">
 
     <!-- FUND IN -->
     <div class="action-card fund-in">
-    <h3>Fund In</h3>
+      <h3>Nạp tiền</h3>
 
-    <input type="number" min="1" [(ngModel)]="amountFundIn" placeholder="Amount" />
+      <input type="number" min="1" [(ngModel)]="amountFundIn" placeholder="Số tiền" />
 
-    <input type="text" [(ngModel)]="fundInDescription" placeholder="Description" />
+      <!-- Stripe Card Element -->
+      <div id="card-element" class="card-element"></div>
+      <div id="card-errors" class="card-errors"></div>
 
-    <button (click)="fundIn()">Fund In</button>
-    </div>
-
-    <!-- WITHDRAW -->
-    <div class="action-card withdraw">
-      <h3>Withdraw</h3>
-
-      <input type="number" [(ngModel)]="amountWithdraw" placeholder="Amount" />
-
-      <input type="text" [(ngModel)]="withdrawDescription" placeholder="Description"/>
-
-      <button (click)="withdraw()">Withdraw</button>
+      <button [disabled]="isProcessing" (click)="fundIn()">Nạp tiền</button>
     </div>
 
   </div>
+
 </div>

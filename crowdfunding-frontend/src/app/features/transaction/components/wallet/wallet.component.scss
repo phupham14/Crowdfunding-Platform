@@ -97,11 +97,16 @@
   }
 }
 
-.withdraw button {
-  background: #ef4444;
-  color: white;
+.card-element {
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 0.75rem;
+  background: white;
+}
 
-  &:hover {
-    background: #dc2626;
-  }
+.card-errors {
+  color: #ef4444;
+  font-size: 13px;
+  margin-bottom: 0.5rem;
 }

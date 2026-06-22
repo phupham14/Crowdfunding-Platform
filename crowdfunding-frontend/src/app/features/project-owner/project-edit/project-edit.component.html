@@ -1,5 +1,5 @@
 <div class="project-edit">
-    <h2>Update Project</h2>
+    <h2>Cập nhật dự án</h2>
 
     <div *ngIf="successMessage" class="alert success">
         {{ successMessage }}
@@ -11,52 +11,52 @@
 
     <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
-            <label>Project Title</label>
+            <label>Tên dự án</label>
             <input type="text" formControlName="name" />
         </div>
 
         <div class="form-group">
-            <label>Description</label>
+            <label>Mô tả</label>
             <textarea rows="4" formControlName="description"></textarea>
         </div>
 
         <div class="form-group">
-            <label>Category</label>
+            <label>Danh mục</label>
             <input type="text" formControlName="category" />
         </div>
 
         <div class="form-group">
-            <label>Location</label>
+            <label>Vị trí</label>
             <input type="text" formControlName="location" />
         </div>
 
         <div class="form-group">
-            <label>Funding Target</label>
+            <label>Mục tiêu đầu tư</label>
             <input type="number" formControlName="funding_target" />
         </div>
 
         <div class="form-group">
-            <label>Minimum Investment Amount (VND)</label>
+            <label>Giá trị đầu tư tối thiểu (VND)</label>
             <input type="number" formControlName="min_invest_amount" />
         </div>
 
         <div class="form-group">
-            <label>Maximum Investment Amount (Optional)</label>
+            <label>Giá trị đầu tư tối đa (VND) (Tùy chọn)</label>
             <input type="number" formControlName="max_invest_amount" />
         </div>
 
         <div class="form-group">
-            <label>Funding Start Date</label>
+            <label>Ngày bắt đầu huy động</label>
             <input type="date" formControlName="start_at" />
         </div>
 
         <div class="form-group">
-            <label>Funding End Date</label>
+            <label>Ngày kết thúc huy động</label>
             <input type="date" formControlName="end_at" />
         </div>
 
         <button type="submit" [disabled]="loading">
-            {{ loading ? 'Saving...' : 'Update Project' }}
+            {{ loading ? 'Đang cập nhật...' : 'Cập nhật dự án' }}
         </button>
     </form>
 </div>

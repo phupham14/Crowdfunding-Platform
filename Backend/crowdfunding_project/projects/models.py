@@ -6,11 +6,13 @@ from accounts.models.user import User
 class Project(models.Model):
 
     STATUS_CHOICES = (
-        ("OPEN", "Open"),
-        ("CLOSED", "Closed"),
-        ("CANCELLED", "Cancelled"),
-        ("REJECTED", "Rejected"),
         ("PENDING", "Pending Approval"),
+        ("REJECTED", "Rejected"),
+        ("OPEN", "Open"),
+        ("FUNDED", "Funded"),
+        ("REPAYING", "Repaying"),
+        ("COMPLETED", "Completed"),
+        ("CANCELLED", "Cancelled"),
     )
 
     RISK_CHOICES = [
@@ -31,12 +33,14 @@ class Project(models.Model):
 
     funding_target = models.DecimalField(max_digits=18, decimal_places=2)
     raised = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    total_repaid = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     apr_expected = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
 
     start_at = models.DateTimeField(null=True, blank=True)
     end_at = models.DateTimeField(null=True, blank=True)
 
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="PENDING")
+    is_disbursed = models.BooleanField(default=False)
 
     risk_level = models.SmallIntegerField(null=True, blank=True)
     expected_return_score = models.SmallIntegerField(null=True, blank=True)

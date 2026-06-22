@@ -65,8 +65,7 @@ export class CreateProjectComponent implements OnInit {
       funding_target: this.projectForm.value.funding_target,
       location: this.projectForm.value.location,
       start_at: this.formatDate(this.projectForm.value.start_date),
-      end_at: this.formatDate(this.projectForm.value.end_date),
-      status: 'OPEN'
+      end_at: this.formatDate(this.projectForm.value.end_date)
     };
 
     this.isSubmitting = true;

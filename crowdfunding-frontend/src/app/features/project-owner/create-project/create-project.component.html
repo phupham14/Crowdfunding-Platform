@@ -1,33 +1,33 @@
 <div class="create-project">
-  <h2>Create Project</h2>
+  <h2>Tạo dự án</h2>
 
   <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
 
-    <input formControlName="title" placeholder="Project Title"/>
+    <input formControlName="title" placeholder="Tên dự án"/>
 
-    <textarea formControlName="description" placeholder="Description"></textarea>
+    <textarea formControlName="description" placeholder="Mô tả"></textarea>
 
-    <input type="number" formControlName="funding_target" placeholder="Funding Target (VND)"/>
+    <input type="number" formControlName="funding_target" placeholder="Mục tiêu đầu tư (VND)"/>
 
-    <input formControlName="location" placeholder="Location"/>
+    <input formControlName="location" placeholder="Vị trí"/>
 
-    <input type="date" formControlName="start_date" placeholder="Start Date"/>
+    <input type="date" formControlName="start_date" placeholder="Ngày bắt đầu"/>
     
-    <input type="date" formControlName="end_date" placeholder="End Date"/>
+    <input type="date" formControlName="end_date" placeholder="Ngày kết thúc"/>
 
     <select formControlName="category">
-      <option value="">-- Select Category --</option>
+      <option value="">-- Lựa chọn danh mục --</option>
       <option *ngFor="let cat of categories" [value]="cat.name">
         {{ cat.name }}
       </option>
     </select>
 
-    <input formControlName="image" placeholder="Image URL"/>
+    <input formControlName="image" placeholder="Ảnh dự án"/>
 
     <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
 
     <button type="submit" [disabled]="isSubmitting || projectForm.invalid">
-      {{ isSubmitting ? 'Creating...' : 'Create' }}
+      {{ isSubmitting ? 'Đang tạo...' : 'Tạo dự án' }}
     </button>
 
   </form>

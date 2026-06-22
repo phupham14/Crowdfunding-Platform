@@ -9,6 +9,7 @@ const routes: Routes = [
   { path: 'project/:id', loadChildren: () => import('./features/project-detail/project-detail.module').then(m => m.ProjectDetailModule) },
   { path: 'risk-profiles', loadChildren: () => import('./features/risk-profile/risk-profile.module').then(m => m.RiskProfileModule)},
   { path: 'investor', loadChildren: () => import('./investor/investor.module').then(m => m.InvestorModule) },
+  { path: 'project-owner-application', loadChildren: () => import('./features/project-owner-application/project-owner-application.module').then(m => m.ProjectOwnerApplicationModule) },
   { path: 'project-owner', loadChildren: () => import('./features/project-owner/project-owner.module').then(m => m.ProjectOwnerModule)},
   { path: 'reports', loadChildren: () => import('./features/reports/reports.module').then(m => m.ReportsModule)},
   { path: 'transactions', loadChildren: () => import('./features/transaction/transaction.module').then(m => m.TransactionModule)},

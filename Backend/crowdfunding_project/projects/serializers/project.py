@@ -19,6 +19,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             "start_at",
             "end_at",
             "status",
+            "is_disbursed",
+            "total_repaid",
             "risk_level",
             "expected_return_score",
             "liquidity_score",
@@ -29,4 +31,16 @@ class ProjectSerializer(serializers.ModelSerializer):
             "updated_at",
             "raised",
         ]
-        read_only_fields = ["id", "owner_name", "created_at", "updated_at"]
+        read_only_fields = [
+            "id",
+            "owner_name",
+            "status",
+            "is_disbursed",
+            "total_repaid",
+            "risk_level",
+            "expected_return_score",
+            "liquidity_score",
+            "created_at",
+            "updated_at",
+            "raised",
+        ]

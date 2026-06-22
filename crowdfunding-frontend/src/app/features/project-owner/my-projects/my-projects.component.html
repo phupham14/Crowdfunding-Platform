@@ -1,17 +1,20 @@
 <div class="my-projects">
-  <h2>My Projects</h2>
+  <h2>Dự án của tôi</h2>
 
   <button routerLink="/project-owner/create">
-    Create New Project
+    Tạo dự án mới
   </button>
 
   <table>
     <thead>
       <tr>
-        <th>Title</th>
-        <th>Status</th>
-        <th>Funding Progress</th>
-        <th>Actions</th>
+        <th>Tên dự án</th>
+        <th>Trạng thái</th>
+        <th>Tiến độ huy động</th>
+        <th>Giải ngân</th>
+        <th>Đã hoàn vốn</th>
+        <th>Còn lại</th>
+        <th>Hành động</th>
       </tr>
     </thead>
 
@@ -23,8 +26,11 @@
           {{ project.raised | currency:'VND' }} /
           {{ project.funding_target | currency:'VND' }}
         </td>
+        <td>{{ project.is_disbursed ? 'Đã giải ngân' : 'Chưa giải ngân' }}</td>
+        <td>{{ project.total_repaid | currency:'VND' }}</td>
+        <td>{{ getRemaining(project) | currency:'VND' }}</td>
         <td>
-          <button (click)="goToDetail(project.id)">Detail</button>
+          <button (click)="goToDetail(project.id)">Chi tiết</button>
         </td>
       </tr>
     </tbody>

@@ -2,7 +2,7 @@
 
   <!-- HEADER -->
   <div class="dashboard-header">
-    <h2>Investor Dashboard</h2>
+    <h2>Trang chủ nhà đầu tư</h2>
     <p>Tổng quan hoạt động đầu tư của bạn</p>
   </div>
 
@@ -10,7 +10,7 @@
   <div class="kpi-grid">
     <div class="kpi-card green">
       <span class="label">Tổng tiền đã đầu tư</span>
-      <span class="value">{{ totalInvested | currency }}</span>
+      <span class="value">{{ totalInvested | currency:'VND' }}</span>
     </div>
 
     <div class="kpi-card blue">
@@ -50,14 +50,39 @@
   <div class="section">
     <h3>Khuyến nghị dành cho bạn</h3>
 
-    <p *ngIf="recommendedProjects.length === 0" style="color:red">
+    <div class="recommend-loading" *ngIf="isLoadingRecommendations">
+      <div class="recommend-card skeleton-card" *ngFor="let item of [1, 2, 3]">
+        <div class="skeleton skeleton-image"></div>
+        <div class="content">
+          <div class="skeleton skeleton-title"></div>
+          <div class="skeleton skeleton-line"></div>
+          <div class="skeleton skeleton-line short"></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="recommend-fallback" *ngIf="!isLoadingRecommendations && recommendationError">
+      {{ recommendationError }}
+    </p>
+
+    <p class="recommend-fallback" *ngIf="!isLoadingRecommendations && !recommendationError && recommendedProjects.length === 0">
       ❌ Không có project gợi ý
     </p>
 
-    <div class="recommend-grid">
+    <div class="recommend-grid" *ngIf="!isLoadingRecommendations && recommendedProjects.length > 0">
       <div class="recommend-card" *ngFor="let project of recommendedProjects" (click)="goToProject(project.id)">
+        <div
+          class="summary-tag"
+          *ngIf="project.explanation?.summary"
+          (click)="$event.stopPropagation()"
+          tabindex="0"
+        >
+          <span class="summary-tag__label">Lý do gợi ý</span>
+          <span class="summary-tag__text">{{ project.explanation.summary }}</span>
+        </div>
+
         <img
-          [src]="project.image || 'https://cdn.shopify.com/s/files/1/0070/7032/articles/BestCrowdfundingSites_resized-03_ef0bf72c-3adf-4c18-bb6a-38635fb38f01.jpg?v=1764786604'" />
+          [src]="project.image || 'https://cdn.shopify.com/b/shopify-brochure2-assets/4c0c0909f130a5ae0bfd254287ea84a3.jpg?originalWidth=1848&originalHeight=782&width=1800'" />
   
         <div class="content">
           <h4>{{ project.name }}</h4>
